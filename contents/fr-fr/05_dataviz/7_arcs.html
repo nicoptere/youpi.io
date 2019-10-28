@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>arcs</title>
+    <meta name="description" content="mettre en relation deux ensembles à l'aide de demi cercles">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+
+
+    <script src="../base.js"></script>
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="CSVLoader.js"></script>
+    <script src="data_loader.js"></script>
+
+    <script>
+
+        function draw() {
+
+            requestAnimationFrame(draw);
+
+            ctx.restore();
+            ctx.save();
+            ctx.clearRect(0, 0, w, h);
+
+            resizeDataPoints()
+
+            ctx.lineWidth = .25;
+
+            var Y = h / 3 * 2;
+            data.forEach(function (obj, i) {
+                var r = map(obj.t, t_min, t_max, 0, w / 2);
+                ctx.strokeStyle = "#09C";
+                G.arc(w / 2 - r / 2, Y, r / 2, -PI, 0);
+
+                r = map(obj.ff, ff_min, ff_max, 0, w / 2);
+                ctx.strokeStyle = "#F00";
+                G.arc(w / 2 + r / 2, Y, r / 2, -PI, 0);
+            });
+
+            ctx.strokeStyle = "#999";
+            G.graduation(1, Y, w - 1, Y, 100, 5);
+            G.graduation(1, Y, w - 1, Y, 50, 10);
+            G.graduation(1, Y, w - 1, Y, 10, 15);
+
+
+        }
+
+    </script>
+</body>
+
+</html>

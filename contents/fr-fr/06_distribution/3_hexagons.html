@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>hexagones</title>
+    <meta name="description" content="créer un pavage d'hexagones">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+
+<body>
+
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="../base.js"></script>
+
+    <script>
+
+
+        var G = new Graphics(ctx);
+        function draw() {
+
+            requestAnimationFrame(draw);
+            ctx.clearRect(0, 0, w, h);
+
+            //on calcule les mesures d'un hexagone (cf. grille triangulaire)
+            var sides = 6;
+            var L = 2 * Math.sin(Math.PI / sides);
+            var A = L / (2 * Math.tan(Math.PI / sides));
+
+            ctx.globalAlpha = .5;
+
+            var radius = 50;
+            var countX = Math.ceil(w / (L * radius * 2)) + 1;
+            var countY = Math.ceil(h / (A * radius * 2)) + 1;
+
+            for (var i = 0; i <= countX; i++) {
+
+                for (var j = 0; j <= countY; j++) {
+
+                    var x = (i + (j % 2 === 1 ? .5 : 0)) * radius * 2 * A;
+                    var y = j * (radius * (1 + L / 2));
+                    G.disc(x, y, 2);
+                    drawHexagon(x, y, radius);
+
+                }
+            }
+
+            return
+
+            //une animation
+            ctx.clearRect(0, 0, w, h);
+
+            var diagonal = Math.sqrt(w * w + h * h)
+            for (var i = 0; i <= countX; i++) {
+
+                for (var j = 0; j <= countY; j++) {
+
+                    var x = (i + (j % 2 === 1 ? .5 : 0)) * radius * 2 * A;
+                    var y = j * (radius * (1 + L / 2));
+
+                    G.disc(x, y, 1);
+
+                    //distance au centre normalisée
+                    var dx = w / 2 - x
+                    var dy = h / 2 - y
+                    var d = 1 - Math.sqrt(dx * dx + dy * dy) / diagonal
+
+                    //on calcule une oscillation an fonction de la distance et du temps
+                    d *= d * d * d
+                    d = Math.sin(Math.PI * 2 * d + performance.now() * 0.003) * .5 + .5
+
+                    //on indexe le rayon sur la distance
+                    drawHexagon(x, y, radius * d)
+                    
+                }
+            }
+        }
+
+        function fromAngleDistance(angle, distance) {
+            return new Point(Math.cos(angle) * distance, Math.sin(angle) * distance);
+        }
+
+        function drawHexagon(x, y, radius) {
+
+            var step = PI / 3;	 // 60°
+            var start = step / 2;   // 30°
+
+            ctx.beginPath();
+            for (var k = 0; k < 6; k++) {
+
+                var p = fromAngleDistance(start + k * step, radius);// cos/sin( angle ) * radius
+                p.x += x;
+                p.y += y;
+                ctx.lineTo(p.x, p.y);
+
+            }
+            ctx.closePath();
+            ctx.stroke();
+
+        }
+
+        draw();
+
+
+    </script>
+</body>
+
+</html>

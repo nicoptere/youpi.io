@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Poisson</title>
+    <meta name="description" content="une distribution de Poisson permet de placer des cercles sans qu'ils se superposent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+
+<body>
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="../base.js"></script>
+    <script src="poisson.js"></script>
+
+    <script>
+
+        var G = new Graphics(ctx);
+
+
+        function draw() {
+
+            requestAnimationFrame(draw);
+
+            ctx.clearRect(0, 0, w, h);
+            var count = (Math.sin(performance.now() * 0.001) * .5 + .5) * distribution.length;
+            for (i = 0; i < count; i++) {
+                ctx.globalAlpha = 1 - i / count;
+                var p = distribution[i];
+                G.disc(p, 10);
+            }
+            
+        }
+        var distribution
+        window.onload = function(){
+
+            //computes a Poisson disc distribution
+            distribution = Poisson.distribute(1000, 20, w, h);
+            
+            draw();
+        } 
+
+        canvas.addEventListener('mousedown', function () { distribution = Poisson.distribute(1000, 20, w, h); });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>splines</title>
+    <meta name="description" content="splines Cubique, Catmull-Rom, Cardinal et Simplification de Douglas-Peucker">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+
+<body>
+
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="../base.js"></script>
+
+    <script src="../utils/Cardinal.js"></script>
+    <script src="../utils/Catmullrom.js"></script>
+    <script src="../utils/Quadratic.js"></script>
+    <script src="../utils/Simplify.js"></script>
+
+    <script>
+        var G = new Graphics(ctx);
+
+        function draw() {
+
+            ctx.fillStyle = "#FFF";
+            ctx.globalAlpha = 1;
+            ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = "#000";
+
+
+            //on crée une série de points d'ancrages aléatoires, centrés horizontalement
+            var points = [];
+            for (var i = -50; i <= w + 50; i += 50) {
+                points.push(new Point( i, h / 2 + (Math.random() - .5) * h / 3));
+            }
+            ctx.lineWidth = 4;
+            // ctx.strokeStyle = "#0C6";//
+            G.polyline(points);
+
+            ctx.save();
+
+            return
+            
+            //et on calcule différentes courbes à partir de ces points d'ancrage
+
+            // cardinal :
+            // changez le "3" pour changer les "boucles"
+            // à 0.5 la courbe se superpose à celle de Catmull-Rom
+            var card = Cardinal.compute(points, .05, 3, false);
+            
+            ctx.lineJoin = "round";
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = "#06C"; //bleu
+            G.polyline(card);
+
+            return
+
+            //catmull rom
+            //cette courbe passe par les points d'ancrage, une propriété 
+            //importante dans beaucoup d'applications
+            var catmull = CatmullRom.compute(points, .1, false);
+
+            ctx.lineWidth = 6; 
+            ctx.strokeStyle = "#FC0";//jaune
+            G.polyline(catmull);
+
+            return
+
+            //une courbe quadratique (ou de Bézier)
+            // rapide à calculer mais elle ne passe pas par les points d'ancrage
+            var quad = Quadratic.compute(points, .1, false);
+
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "#E00";//rouge
+            G.polyline(quad);
+
+
+            ctx.restore();
+
+            return
+
+
+            ctx.clearRect( 0,0,w,h )
+
+            //simplification
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = "#06C";
+            G.polyline(quad);
+            
+
+            // la valeur dist controle la quantité de simplification
+            // avec un dist à 0, aucune simplification ne s'applique
+            // avec un dist élevé, on obtient très peu de points 
+            var dist = 20
+            var simp = Simplify.compute(quad, dist );
+
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "#6C0";
+            G.polyline(simp);
+            simp.forEach( function(p){G.disc(p,5 )})
+
+        }
+        canvas.addEventListener('mousedown', draw);
+        draw();
+
+    </script>
+
+</body>
+
+</html>

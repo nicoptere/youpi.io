@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>K-moyens</title>
+    <meta name="description" content="un méthode qui permet de regrouper des ensembles de valeurs">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+
+
+    <script src="../base.js"></script>
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="CSVLoader.js"></script>
+    <script src="data_loader.js"></script>
+
+    <script src="../utils/Kmeans.js"></script>
+
+    <script>
+
+        //stocke les K-moyens de l'ensemble de points
+        var means;
+        function draw() {
+
+            requestAnimationFrame(draw);
+
+            ctx.restore();
+            ctx.save();
+            ctx.clearRect(0, 0, w, h);
+
+            resizeDataPoints()
+            
+
+            //crée une palette de couleurs
+            var colors = ["#583354", "#EF8166", "#FEC091", "#FDEFBE"];
+
+            //concatène les valeurs des 2 tablkeaux
+            var values = winds.concat(temperatures);
+
+            values.forEach(function (p) {
+                ctx.fillStyle = ctx.strokeStyle = "#000";
+                G.disc(p.x, p.y, 2);
+            })
+            return
+
+
+            //arrière plan en violet foncé
+            ctx.fillStyle = "#260A30";
+            ctx.fillRect(0, 0, w, h);
+            
+            //calcule et stocke les K-moyens une fois pour toutes
+            //(un peu lourd à calculer)
+            if (means == null) {
+                means = Kmeans.compute(values, colors.length, 100);
+            }
+
+            var centroids = means.centroids;
+            var points = means.points;
+            //dessine les clusters reliés à leur centroids
+            points.forEach(function (p) {
+                ctx.fillStyle = ctx.strokeStyle = colors[p.centroid];
+                G.disc(p.x, p.y, 2);
+                G.line(p, centroids[p.centroid])
+            });
+
+            //dessine les centroids
+            centroids.forEach(function (p, i) {
+                ctx.fillStyle = ctx.strokeStyle = colors[i];
+                G.disc(p.x, p.y, p.items / 2);
+            });
+
+        }
+
+    </script>
+</body>
+
+</html>

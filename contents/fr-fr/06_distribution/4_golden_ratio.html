@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>nombre d'or</title>
+    <meta name="description" content="juste parce que c'est joli">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="../base.js"></script>
+    <script>
+
+        var G = new Graphics(ctx);
+        function reset() {
+
+            ctx.translate(w / 2, h / 2);
+
+            var count = 1024;
+            var golden_angle = Math.PI * 2 / ((1 + Math.sqrt(5)) / 2);
+
+            var angle, x, y, radius
+            for (var i = 0; i < count; i++) {
+
+                angle = i * golden_angle;
+                radius = Math.sqrt(i / count) * Math.min( w,h ) / 2.5;
+
+                x = Math.cos(angle) * radius
+                y = Math.sin(angle) * radius
+
+                G.circle(x, y, 3);
+                G.circle(x, y, 1);
+
+            }
+        }
+        reset()
+
+    </script>
+</body>
+</html>

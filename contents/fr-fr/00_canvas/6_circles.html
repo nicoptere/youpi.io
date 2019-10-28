@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>cercles</title>
+    <meta name="description" content="placer des cercles en grille et aborder la trigonométrie">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    
+</head>
+
+<body>
+    <script src="../base.js"></script>
+    <script src="../geom.js"></script>
+    <script>
+
+        //crée une fonction pour dessiner un cercle
+        function arc(ctx, x, y, radius) {
+            //commence un ensemble d'instructions de dessin
+            ctx.beginPath();
+
+            //instruction de dessin d'un arc de 360°
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+
+            //ferme la forme
+            ctx.closePath();
+
+            //dessine
+            ctx.stroke();
+
+        }
+
+        //utilise un point pour positionner le cercle
+        var i, j, x, y, angle, delta, countX, countY, deltaX, deltaY;
+        var c = new Point();
+        var radius = 100;
+
+        function draw() {
+
+            requestAnimationFrame(draw);
+            ctx.clearRect(0, 0, w, h);
+
+            //assigne le style de trait 
+            ctx.lineWidth = 20;
+            ctx.strokeStyle = "#06C";
+
+            //centre du cercle
+            c.x = w / 2;// X
+            c.y = h / 2;// Y
+
+            //appelle la méthode dessin d'un arc
+            arc(ctx, c.x, c.y, radius);
+
+            return;
+
+            //change l'épaisseur de trait
+            ctx.lineWidth = 10;
+            
+            //droite: c.x + rayon
+            arc(ctx, c.x + radius, c.y, radius);
+
+            //gauche: c.x - rayon
+            arc(ctx, c.x - radius, c.y, radius);
+
+            //haut: c.y - rayon
+            arc(ctx, c.x, c.y - radius, radius);
+
+            //bas: c.y + rayon
+            arc(ctx, c.x, c.y + radius, radius);
+
+            //exercice rajouter les cercles: 
+            //bas gauche, bas droite, haut gauche, haut droite
+            
+            return;
+            
+            ctx.clearRect(0,0,w,h)
+
+            //une grille de cercles 
+            //avec une boucle for, on peut rajouter N cercles disposés en grille
+            
+            //on va faire des cercles de 20 pixels de rayon
+            let rayon = 20
+            let ecart = rayon * 2 + 5 // 5 = épaisseur de trait / 2
+
+            //cout X/Y détermine combien de cercles il faut pour couvrir le canvas
+            countX = canvas.width / ecart;
+            countY = canvas.height / ecart;
+
+            //dles deltaX/Y vont stocker la position X/Y des cercles 
+            delatX = 0;
+            deltaY = 0;
+            for ( i = 0; i < countX; i++ )
+            {
+                //décalage du cercle en X
+                deltaX = i * ecart;
+    
+                for ( j = 0; j < countY; j++ )
+                {
+                    //décalage du cercle en Y
+                    deltaY = j * ecart;
+    
+                    //on dessine un cercle complet au centre + décalages X et Y
+                    arc( ctx, deltaX, deltaY, rayon );
+
+                }
+            }            
+            return;
+
+
+
+
+
+            /*
+            comment rajouter 6 cercles régulièrement espacés autour du centre?
+    
+            positionner les éléments sur un cercle avec des XY est compliqué
+            la solution est d'utiliser un angle et une longueur
+    
+            la longueur, on la connait, c'est le rayon: radius
+            si on veut 6 cercles autour du centre, on divise 360° par 6
+    
+                delta = 360° / 6
+    
+            ça nous donne un delta : la quantité d'angle entre chaque cercle
+    
+            la position d'un des 6 cercles autour du centre sera:
+    
+                angle = ( 1 à 6 * delta )
+            
+            et
+    
+                position XY = angle * rayon
+    
+            pour transformer un angle en coordonnées X et Y, on doit utiliser 
+            le cosinus et le sinus de l'angle.
+    
+                X = Math.cos( angle )
+            
+            et 
+    
+                Y = Math.sin( angle )
+    
+            les valeurs X et Y sont comprises entre -1 et 1 quel que soit l'angle
+            il faut donc les multiplier par le rayon pour les positionner dans l'espace
+    
+                X = Math.cos( angle ) * rayon
+            
+            et 
+    
+                Y = Math.sin( angle ) * rayon
+    
+            on essaye:
+            //*/
+
+            ctx.clearRect(0,0,w,h)
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = "#C06";
+
+            //nombre de cercles à placer
+            var count = 6;
+
+            //quantité d'angle entre chaque cercle
+
+            // delta = 360° / count
+
+            //on utilise des Radians et pas des degrés donc:
+
+            // delta = Math.PI * 2 / count
+
+            delta = (Math.PI * 2) / count;
+
+            //de 1 à 6
+            for (i = 1; i <= count; i++) {
+
+                //angle = ( 1 à 6 * delta )
+                angle = (i * delta);
+
+                //transformation de l'angle en X et Y
+
+                x = Math.cos(angle) * radius;
+
+                y = Math.sin(angle) * radius;
+
+                //dessin !
+                //            arc( ctx, x, y, radius );
+
+                //pour dessiner autour du centre
+                arc(ctx, c.x + x, c.y + y, radius);
+
+            }
+        }
+        draw();
+
+    </script>
+</body>
+
+</html>

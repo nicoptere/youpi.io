@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>grille triangulaire</title>
+    <meta name="description" content="on peut étendre la grille régulière pour dessiner des triangles">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+
+<body>
+
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="../base.js"></script>
+
+    <script>
+
+        var G = new Graphics(ctx);
+
+        function reset() {
+
+            //on commence par calculer le dimensions d'un triangle équilatéral de rayon 1
+            //c'est un polygone régulier à 3 côtés
+            var sides = 3;
+
+            //la longueur d'un côté
+            var L = 2 * Math.sin(Math.PI / sides);
+
+            //la longueur du centre au milieu d'un côté ( l'apothème )
+            var A = L / (2 * Math.tan(Math.PI / sides));
+
+            // somme du rayon et de l'apothème:
+            // la distance entre un point et le milieu du côté opposé
+            var H = (1 + A);
+
+            //on met à l'échelle
+            var size = 50;
+            L *= size;
+            H *= size;
+
+            //la grille n'est pas régulière:
+            // les X ne varient pas au même rythme que les Y
+            var stepX = Math.ceil(w / L);
+            var stepY = Math.ceil(h / H);
+
+            //on parcourt les colones
+            for (var i = 0; i < w; i += stepX) {
+                //et les lignes
+                for (var j = 0; j <= h; j += stepY) {
+
+                    //index des cellules
+                    var cx = Math.round(i / stepX);
+                    var cy = Math.round(j / stepY);
+
+                    //coordonnées des points
+                    var x = cx * (L / 2);
+                    var y = cy * H;
+
+
+                    //on dessine la trame                    
+                    ctx.globalAlpha = .05;
+                    ctx.strokeRect(x, y, L / 2, H);
+                    ctx.globalAlpha = 1;
+
+                    continue
+
+                    //le motif triangulaire apparaît ici
+                    if (cx % 2 == cy % 2) {
+
+                        ctx.fillStyle = "#06C"
+                        G.disc(x, y, 3);
+
+                    }
+
+                    continue
+
+                    //et la trame inverse
+                    if (cx % 2 != cy % 2) {
+                        ctx.fillStyle = "#C00"
+                        G.disc(x, y, 2);
+                    }
+
+                    continue
+
+                    //un motif hexagonal apparaît là 
+                    var modx = cx % 6;
+                    var mody = cy % 2;
+                    if ((mody == 0 && (modx == 1 || modx == 3))
+                        || (mody == 1 && (modx == 0 || modx == 4))) {
+                        ctx.strokeStyle = "#0C6"
+                        G.circle(x, y, L/2);
+                    }
+                    continue;
+
+                }
+            }
+        }
+        reset()
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset="UTF-8">
+    <title>rotation autour d'un point</title>
+    <meta name="description" content="pivote un ensemble de points autour d'un autre point (lattice)">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+
+    <script src="../base.js"></script>
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script>
+
+        var G = new Graphics(ctx);
+
+        function reset() {
+
+            ctx.clearRect(0, 0, w, h);
+
+            // on fait bouger un point "count" fois linéairement en X
+            // aléatoirement en Y et on stocke les positions dans un tableau 'points'
+
+            var count = 256;
+            var steplength = 10;
+            var p = new Point(5 + Math.random() * 20, h / 4);
+            var points = [];
+            for (var i = 0; i < count; i++) {
+
+                //il faut soit cloner soit créer un nouveau point
+                //ici on clone
+                points.push(p.clone());
+
+                p.x += steplength;
+                p.y += (Math.random() - .5) * steplength;
+
+            }
+
+            //et on la desine, ce sera le motif à faire tourner autour d'un centre
+            G.polyline(points);
+
+            return;
+
+            ctx.clearRect(0, 0, w, h);
+
+            var colors = ["#666", "#06C", "#C06", "#FC0"]
+            for (var n = 0; n < colors.length; n++) {
+
+                //commenter pour afficher les 4 couleurs
+                if (n > 0) {
+                    continue
+                }
+
+                //on assigne une couleur 
+                ctx.strokeStyle = colors[n]
+
+                //on sauve l'état du contexte
+                ctx.save()
+
+                //on bouge le centre du canvas aléatoirement dans la page
+
+                ctx.translate(Math.random() * w, Math.random() * h);
+
+                //puis on applique une série de rotations autour d'un point
+
+                var rotations = 64;
+                var angleStep = Math.PI * 2 / rotations;
+                for (i = 0; i < rotations; i++) {
+
+                    ctx.rotate(angleStep * i)
+                    G.polyline(points);
+
+                }
+
+                ctx.restore()
+
+            }
+
+        }
+        window.addEventListener('mousedown', reset);
+        reset()
+        function circle(x, y, r) {
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        function renderLine(points) {
+            ctx.beginPath();
+            points.forEach(function (p) {
+                ctx.lineTo(p.x, p.y);
+            });
+            ctx.stroke();
+        }
+    </script>
+
+</body>
+
+</html>

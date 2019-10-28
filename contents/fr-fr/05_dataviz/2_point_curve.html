@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>point sur courbe</title>
+    <meta name="description" content="comment trouver un point sur une suite de points. très utile pour parcourir une courbe par exemple">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+
+    <script src="../base.js"></script>
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="CSVLoader.js"></script>
+    <script src="data_loader.js"></script>
+
+
+    <script>
+
+        function getPositionAt(points, t) {
+
+            var length = points.length - 1;
+            var i0 = Math.floor(length * t);
+            i0 = i0 < length - 1 ? i0 : length - 1;
+            var i1 = Math.min(i0 + 1, length);
+
+            var delta = 1 / length;
+            var nt = (t - (i0 * delta)) / delta;
+            return points[i0].pointAt(nt, points[i1]);
+
+        }
+
+        function draw() {
+
+            requestAnimationFrame(draw);
+
+            ctx.restore();
+            ctx.save();
+            ctx.clearRect(0, 0, w, h);
+
+            resizeDataPoints()
+
+            //sélection d'un point sur une courbe, plus un utilitaire qu'une dataviz mais ça peut servir
+            var values = winds.map(p => { return new Point(p.x, p.y / 4 + h / 2 - h / 8) })
+
+            //une variable de temps qui oscille
+            var time = (performance.now() * .0001) % 1;
+
+            //dessine une ligne graduée
+            ctx.fillStyle = ctx.strokeStyle = "#CCC";
+            G.graduation(margin, h / 2 + h / 4 - margin, w - margin, h / 2 + h / 4 - margin, data.length, margin);
+
+            //dessine le rectangle où se trouve le point en gris
+            //trouve l'index du rexctangle
+            var id = (Math.floor((values.length - 1) * time));
+            if (id < 0) id = 0;
+            //dessine
+            ctx.fillRect(values[id].x, 0, w / data.length, h);
+
+            //trace la courbe des températures en noir
+            ctx.strokeStyle = "#666";
+            G.polyline(values);
+
+            //dessine le point au temps T sur la courbe
+            ctx.fillStyle = "#F00";
+            var p = getPositionAt(values, time);
+            G.disc(p, 4);
+
+            //dessine en bleu les points de la courbe
+            //entre lesquels se trouve le point p
+            ctx.fillStyle = "#09C";
+
+            p = values[id];
+            G.disc(p, 2);
+
+            p = values[Math.min(id + 1, values.length - 1)];
+            G.disc(p, 2);
+
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>symétrie, réflection</title>
+    <meta name="description" content="reproduit un motif en miroir par raport à un axe">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+
+<body>
+
+    <script src="../base.js"></script>
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script>
+
+        var G = new Graphics(ctx);
+
+        /**
+         * @param ctx contexte 2d à transformer
+         * @param p0 point de départ de la ligne de réflection
+         * @param p1 point d'arrivée de la ligne de réflection
+         * @param distance distance de "glide"
+         */
+        function reflection(ctx, p0, p1, distance) {
+
+            var angle = Math.atan2(p1.y - p0.y, p1.x - p0.x);
+            ctx.translate(p0.x, p0.y);
+            ctx.rotate(angle);
+            ctx.scale(1, -1);
+            ctx.translate(distance || 0, 0);//"glide"
+            ctx.rotate(-angle);
+            ctx.translate(-p0.x, -p0.y);
+
+        }
+
+        function reset() {
+
+            ctx.clearRect(0, 0, w, h);
+
+            // on fait bouger un point "count" fois linéairement en X
+            // aléatoirement en Y et on stocke les positions dans un tableau 'points'
+
+            var rotations = 64;
+            var angleStep = Math.PI * 2 / rotations;
+            var points = [];
+            for (i = 0; i <= rotations; i++) {
+                var a = i * angleStep
+                var r = h / 8
+                var p = new Point(i * (w / rotations), h / 2 + Math.sin(a) * r)
+                points.push(p);
+
+            }
+
+            //et on la desine, ce sera le motif à refléter autour d'un centre
+            G.polyline(points);
+
+            return
+
+
+            //on va faire passer la forme d'un axe de réflexion horizontal
+
+            var s = new Point(0, h / 2)
+            var e = new Point(w, h / 2)
+
+            //on sauve l'état du contexte
+            ctx.save()
+
+            //on applique la réflexion
+            reflection(ctx, s, e)
+
+            //on dessine la même forme en rouge sur le context transformé
+            ctx.strokeStyle = "#f00"
+            G.polyline(points);
+
+            //on restaure l'état du contexte
+            ctx.restore()
+
+            return
+
+            var colors = ["#666", "#06C", "#C06", "#FC0"]
+            ctx.clearRect(0, 0, w, h)
+            for (var n = 0; n < colors.length; n++) {
+
+                //commenter pour afficher les 4 couleurs
+                if( n > 0 ){
+                    continue
+                }
+
+
+                //on assigne une couleur 
+                ctx.strokeStyle = colors[n]
+
+                //on va faire passer la forme d'un axe de réflexion horizontal
+
+                var s = new Point(0, h / 2)
+                var e = new Point(w, h / 2)
+
+                // a un axe aléatoire
+                //on choisit aléatoirement 2 points dans la page pour faire un axe
+
+                var a = new Point(Math.random() * w, Math.random() * h)
+                var b = new Point(Math.random() * w, Math.random() * h)
+
+                /*
+                //randomiser le premier axe
+                s = new Point(Math.random() * w, Math.random() * h)
+                e = new Point(Math.random() * w, Math.random() * h)
+                */
+
+                //on applique la couleur
+                ctx.strokeStyle = colors[n]
+                var count = 64
+                for (var i = 0; i < count; i++) {
+
+                    //on sauve l'état du contexte
+                    ctx.save()
+
+                    //on interpole les points de l'axe
+                    var t = i / count
+                    var c = a.pointAt(t, s)
+                    var d = b.pointAt(t, e)
+
+                    //on applique la réflexion
+                    reflection(ctx, c, d)
+
+                    //on dessine la forme
+                    G.polyline(points);
+
+                    //on restaure l'état du contexte
+                    ctx.restore()
+
+                }
+
+            }
+
+        }
+        window.addEventListener('mousedown', reset);
+        reset()
+
+    </script>
+
+</body>
+
+</html>

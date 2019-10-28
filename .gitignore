@@ -1,0 +1,10 @@
+ecal1712/
+dist/
+todo/
+materialize/
+node_modules/
+package-lock.json
+contents/assets/rename.js
+
+
+temp.txt

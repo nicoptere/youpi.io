@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>distribution polaire</title>
+    <meta name="description" content="disposer des objects en cercle, en spirale etc.">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+
+<body>
+
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="../base.js"></script>
+
+    <script>
+
+        var G = new Graphics(ctx);
+
+        function reset() {
+
+            /*
+            les coordonnées polaires marchent avec un angle et un rayon
+            pour convertir l'angle et le rayon en X / Y (des coordonnées cartésiennes)
+            on utilise deux fonctions trigonométriques: sinus et cosinus
+            par exemple: 
+            on veut placer un point à un angle de 30° et un rayon de 250 pixels
+
+            on doit convertir l'angle en radians 
+            un radian = Math.PI / 180
+            */
+            var radians = Math.PI / 180
+
+            //donc 30 ° en radians =             
+            var angle = 30 * radians
+
+            //on définit un rayon
+            var rayon = 250
+
+            // et on les convertit en X Y comme suit
+            var x = Math.cos(angle) * rayon
+            var y = Math.sin(angle) * rayon
+            G.disc(x, y, 10)
+
+            return
+
+            /*
+            l'origine du cercle est en haut à gauche et souvent,
+            le plus simple pour dessiner en coordonées polaires
+            c'est d'amener l'origine du contexte au centre de la page
+            */
+            ctx.clearRect(0, 0, w, h)
+            ctx.translate(w / 2, h / 2);
+
+            //on m:arque l'origine
+            G.disc(0, 0, 2)
+
+            //on va dessiner count points
+            var count = 24;
+
+            //on en déduit la quantité d'angle 'step' qui sépare 2 points 
+            //sur un cercle complet ( l'angle entre 2 points sur le cercle )
+            var step = Math.PI * 2 / count;
+
+            //on choisit un rayon
+            var radius = h / 3;
+
+            //et on applique la distribution:
+
+            for (var i = 0; i < count; i++) {
+
+                //on définit l'angle 
+                var angle = i * step
+
+                //on clacule la position X / Y
+                var x = Math.cos(angle) * radius;
+                var y = Math.sin(angle) * radius;
+
+                //et on dessine le point
+                G.circle(x, y, 10);
+
+            }
+
+            //on obtient 24 points placés autour du centre à une distance de h/3 
+
+            return
+
+            //distribution le long des rayons
+            //on veut disposer des points le long des rayons du cercle
+            var radiusPoints = 8;
+
+            //on va dessiner uniquement un rayon sur 4, on incrémente donc i de 4
+            for (var i = 0; i < count; i += 4) {
+
+                //on définit l'angle 
+                var angle = i * step
+
+                // ici on va faire progressivement grandir le rayon 
+                for (var t = 0; t <= radiusPoints; t++) {
+
+                    //r = passe de 0 à radius en `radiusPoints` étapes
+                    var r = t * (radius / radiusPoints);
+
+                    //on convertit en coordonnées cartésiennes
+                    x = Math.cos(angle) * r;
+                    y = Math.sin(angle) * r;
+
+                    //et on dessine le point
+                    G.circle(x, y, 3);
+
+                }
+            }
+
+            return
+
+            //distribution en spirale 
+            // on veut lui faire faire 2 tours
+            var turns = 2;
+
+            //on calcule l'angle en radians
+            var finalAngle = Math.PI * 2 * turns
+
+            //et on spécifie le pas ( de combien les points sont espacés en radians)
+            step = 10 * radians
+
+            for (angle = 0; angle < finalAngle; angle += step) {
+
+                //le rayon augmente en fonction de l'angle 
+                r = radius * (angle / finalAngle);
+
+                //convertit en coordonnées cartésiennes et dessine
+                x = Math.cos(angle) * r;
+                y = Math.sin(angle) * r;
+                G.circle(x, y, 1);
+
+            }
+
+            return
+
+            /*
+            Nota : ( angle / finalAngle ) est une valeur normalisée (entre 0 et 1)
+            on peut donc appliquer de l'easing et les shaping functions pour 
+            concentrer les valeurs à certains endroits du cercle
+            par exemple, on prépare un objet qui va contenir les informations
+            sur comment desiner la spirale
+            */
+
+            var cfg = { ctx: ctx, finalAngle: finalAngle, radius: radius, step: step }
+
+            // et on lui passe une méthode qui permet de déterminer comment
+            // modifier la valeur T ( angle / finalAngle ), ici avec un "Cubibc easeOut"
+            ctx.strokeStyle = "#C00"
+            drawSpiral(cfg, (t) => { return Math.pow(t, 3); })
+
+            //on voit que la courbe tarde à démarrer puis rejoint vite le rayon maximum 
+
+            return
+
+            //ici on utilise la racine carrée de T
+            ctx.strokeStyle = "#0C6"
+            drawSpiral(cfg, (t) => { return Math.sqrt(t); })
+
+            //on voit que la courbe démarre vite puis rejoint lemntement le rayon maximum 
+
+            return
+
+            //ici on utilise un logarithme 
+            ctx.strokeStyle = "#06C"
+            drawSpiral(cfg, (t) => { return Math.log2(1 + t); })
+
+            return
+
+            //et si on repart sur le cercle
+            cfg.finalAngle = Math.PI * 2
+            //avec un pas très petit (1°)
+            cfg.step = radians
+
+            //on peut modéliser toutes sortes de formes qui tiennent dans un cercle
+            ctx.strokeStyle = "#FC0"
+            drawSpiral(cfg, (t) => {
+                var a = t * PI2 * 24 + Math.PI / 2
+                return Math.sin(a) > 0 ? .75 : 1.25;
+            })
+
+            return
+
+            //on peut modéliser toutes sortes de formes qui tiennent dans un cercle
+            ctx.strokeStyle = "#F00"
+            drawSpiral(cfg, (t) => {
+                //triangle shaping function
+                t = (.5 - Math.abs(t - Math.floor(t + .5)))
+                //aclcule un angle à partir du t modifié
+                var a = Math.PI / 2 + t * PI2 * 6
+                return Math.sin(a) * .25 + .75;
+            })
+
+        }
+
+        function drawSpiral(cfg, fc) {
+
+            ctx.beginPath()
+            for (var angle = 0; angle < cfg.finalAngle; angle += cfg.step) {
+
+                //joue avec la façon dont le rayon change 
+                var t = fc((angle / cfg.finalAngle))
+
+                //convertit en coordonnées cartésiennes et 
+                //tire un trait vers la nouvelle position
+                var x = Math.cos(angle) * cfg.radius * t;
+                var y = Math.sin(angle) * cfg.radius * t;
+                ctx.lineTo(x, y)
+
+            }
+            ctx.stroke()
+        }
+
+
+        reset()
+    </script>
+</body>
+
+</html>

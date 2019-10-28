@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>graphe polaire</title>
+    <meta name="description" content="dessiner des valeurs en cercle (peu lisible, déconseillé pour des vraies dataviz)">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+
+
+    <script src="../base.js"></script>
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="CSVLoader.js"></script>
+    <script src="data_loader.js"></script>
+
+    <script src="../utils/kmeans.js"></script>
+
+    <script>
+
+
+        //stocke les K-moyens de l'ensemble de points
+        var Kmeans;
+        function draw() {
+
+            requestAnimationFrame(draw);
+
+            ctx.restore();
+            ctx.save();
+            ctx.clearRect(0, 0, w, h);
+
+            resizeDataPoints()
+
+
+            //une variable de temps qui oscille
+            var time = .5 + Math.sin(performance.now() * .001) * .5;
+            var inRadius = h / 4;
+            var outRadius = h / 3 * time;
+
+            //dessine des portions d'anneau en gris
+            ctx.strokeStyle = "#ddd";
+            data.forEach(function (obj, i) {
+                
+                var a = i / data.length * PI2;
+                var span = a + PI2 / data.length;
+                G.strokeRing(w / 2, h / 2, inRadius, outRadius, a, span);
+
+            });
+
+            //dessine des portions d'anneau en bleu
+            ctx.strokeStyle = ctx.fillStyle = "#09C";
+            data.forEach(function (obj, i) {
+
+                var a = i / data.length * PI2;
+                var span = a + PI2 / data.length;
+                var r = map(obj.t, t_min, t_max, inRadius, outRadius);
+                
+                G.fillRing(w / 2, h / 2, inRadius, r, a, span);
+                G.strokeRing(w / 2, h / 2, inRadius, r, a, span);
+
+            });
+
+            //dessine des portions d'anneau en jaune
+            ctx.strokeStyle = ctx.fillStyle = "#FC0";
+            data.forEach(function (obj, i) {
+
+                var a = i / data.length * PI2;
+                var span = a + PI2 / data.length;
+                var r = map(obj.ff, ff_min, ff_max, inRadius, outRadius);
+                
+                G.fillRing(w / 2, h / 2, inRadius, r, a, span);
+                G.strokeRing(w / 2, h / 2, inRadius, r, a, span);
+
+            });
+
+        }
+
+    </script>
+</body>
+
+</html>

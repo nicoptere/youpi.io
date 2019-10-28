@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Youpi!</title>
+    <meta name="description" content="it's dangerous to go alone! take this. ️🗡️">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="content">
+
+        <!-- page navbar-->
+
+        <div class="row">
+
+            <nav id="home" class="navbar-fixed">
+
+                <div class="nav-wrapper black">
+                    <div class="row">
+                        <div class="col">
+                            <a href="#" class="open-code-btn"><i class="material-icons">code</i></a>
+                        </div>
+
+                        <!-- <div class="col s3 m3 l3 ">
+                            <a href="#">it's dangerous to go alone! take this.</a>
+                        </div> -->
+
+                        <div class="col nav-tabs-list">
+                        </div>
+                        <div class="col right">
+                            <a href="#about" class="right">
+                                <div class="btn black">about</div>
+                            </a>
+                            <a href="#more" class="right">
+                                <div class="btn black">more</div>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </nav>
+
+            <ul id="editor" class="sidenav col s12">
+
+
+                <div class="">
+
+                    <!-- close btn -->
+                    <div class="fixed-action-btn code-panel-close right">
+                        <a class="btn-floating red">
+                            <i class="close-code-btn medium material-icons">close</i>
+                        </a>
+
+                        <a class="btn-floating blue" style="margin-top: 2em">
+                            <i class="save-code-btn medium material-icons">camera</i>
+                        </a>
+                    </div>
+
+                    <!-- auto compile and error message -->
+                    <div class="row parameters">
+
+                        <!-- themes -->
+                        <div class="col">
+                            <blockquote class="neutral-blockquote">
+
+                                <a class='dropdown-trigger ' data-target='theme_selector'>
+                                    <span class="material-icons white"
+                                        style="vertical-align: middle;">format_color_text</span>
+                                </a>
+
+                                <!-- css list -->
+                                <ul id='theme_selector' style="width:256px" class='dropdown-content s3 m3 l3'>
+                                    <li><a onclick="selectTheme('custom')">default</a></li>
+                                    <li class="divider" tabindex="-1"></li>
+                                    <li><a onclick="selectTheme('hopscotch')">hopscotch</a></li>
+                                    <li><a onclick="selectTheme('lucario')">lucario</a></li>
+                                    <li><a onclick="selectTheme('mdn-like')">mdn-like</a></li>
+                                    <li><a onclick="selectTheme('monokai')">monokai</a></li>
+                                    <li><a onclick="selectTheme('moxer')">moxer</a></li>
+                                    <li><a onclick="selectTheme('nord')">nord</a></li>
+                                    <li><a onclick="selectTheme('paraiso-light')">paraiso-light</a></li>
+                                    <li><a onclick="selectTheme('tomorrow-night-bright')">tomorrow-night</a></li>
+                                    <li><a onclick="selectTheme('yonce')">yonce</a></li>
+                                    <li><a onclick="selectTheme('zenburn')">zenburn</a></li>
+                                </ul>
+                            </blockquote>
+                        </div>
+
+                        <div class="col">
+
+                            <blockquote class="neutral-blockquote">
+                                <label>
+                                    <input class="auto-compile" type="checkbox" checked>
+                                    <span>recompile</span>
+                                </label>
+                            </blockquote>
+
+                        </div>
+
+                        <div class="col">
+                            <blockquote class="neutral-blockquote">
+                                <a href="#" class='forward forawrd_button white'>
+                                    <i class="material-icons" style="vertical-align: middle;">forward</i>
+                                </a>
+                            </blockquote>
+                        </div>
+
+                        <div class="col">
+                            <blockquote class="neutral-blockquote">
+                                <a href="#" class='functions white'>
+                                    <i class="material-icons" style="vertical-align: middle;">functions</i>
+                                </a>
+                            </blockquote>
+                        </div>
+
+                        <div class="col">
+                            <blockquote class="log-message"></blockquote>
+                        </div>
+
+                        <div class="col">
+                            <blockquote class="error-message"></blockquote>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="graph"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <!-- editor frame -->
+                        <div class="col s6">
+
+                            <!-- editor textarea -->
+                            <blockquote class="text-block" contenteditable="true"></blockquote>
+
+                        </div>
+
+                        <!-- result frame -->
+                        <div class="col s6">
+
+                            <iframe class="test-frame"></iframe>
+                            <iframe class="display-frame"></iframe>
+
+                        </div>
+                    </div>
+
+                </div>
+            </ul>
+
+        </div>
+
+        <!-- page content-->
+
+        <div class="container">
+
+            <div id="howto" class="row">
+
+                <h5>click <a class="btn-floating btn-small waves-effect waves-light red" style="vertical-align: top;"><i
+                            class="material-icons">edit</i></a> &
+                    comment the <strong><i>return</i></strong> & <strong><i>continue</i></strong> statements.
+                    if nothing shows up in the right panel, try typing <strong><i>space</i></strong> or
+                    <strong><i>enter</i></strong> in the editor.</h5>
+
+            </div>
+
+            <div class="cards">
+            </div>
+
+            <div id="more" class="row">
+
+                <div class="section">
+                    <a href="#home">
+                        <div class="btn black"><i class="material-icons">arrow_upward</i></div>
+                    </a>
+
+                    <!-- resources -->
+
+                    <h5>more</h5>
+                    <p>as there is no such thing as "too many resources", here's a selection of interesting online
+                        resources</p>
+
+                    <ul class="collection">
+
+                        <li class="collection-item">
+                            <a href="http://www.generative-gestaltung.de/1/">Generative Gestaltung</a>
+                            <p>not an online resource yet a must read, find it, read it.</p>
+                        </li>
+
+                        <li class="collection-item">
+                            <a href="https://natureofcode.com/book/">The Nature of Code</a> by <a
+                                href="https://twitter.com/shiffman">Daniel Shiffman</a>
+                            <p>an invaluable resource to understand computational geometry, systems, agents, fractals
+                                and so much more...</p>
+                        </li>
+
+                        <li class="collection-item">
+                            <a href="https://dpmanual.bitbucket.io/index.html">Computational Graphic Design
+                                Manual</a> by <a href="https://twitter.com/motiondesign_01">Mark Webster</a>
+                            <p>an introduction to computational design with a strong focus on the underlying
+                                artistic concepts. the examples use the <a href="https://p5js.org/">P5.js library</a>
+                            </p>
+                        </li>
+
+                        <li class="collection-item">
+                            <a href="https://p5-demos.glitch.me/"> P5.js Demos</a> by <a
+                                href="https://twitter.com/mattdesl">Matt DesLauriers</a>
+                            <p>though Matt has developed <a href="https://github.com/mattdesl/canvas-sketch">his own
+                                    lib</a>, this series uses the <a href="https://p5js.org/">P5.js library</a></p>
+                        </li>
+
+                        <li class="collection-item">
+                            <a href="https://simonschreibt.de/gat/renderhell/"> Render Hell </a> by <a
+                                href="https://twitter.com/simonschreibt">Simon</a>
+                            <p>if you're interested in WebGL & GLSL but still not sure what this means, I warmly
+                                recommend going throught these 5 funny and exhaustive books</p>
+                        </li>
+
+                        <li class="collection-item">
+                            <a href="https://webglfundamentals.org/"> WebGL Fundamentals </a> by <a
+                                href="https://twitter.com/greggman">Gregg Tavares</a>
+                            <p>Gregg has written multiple series of articles to help people understand WebGL & Three.js
+                                (and more),
+                                the GL examples are based on his tutorials which syas it all, go!</p>
+                        </li>
+
+                        <li class="collection-item">
+                            <a href="https://thebookofshaders.com/"> The book of shaders </a> by <a
+                                href="https://twitter.com/patriciogv">Patricio Gonzalez Vivo</a>
+                            <p>Patricio has written a series of articles to help people understand the Shaders, a must
+                                read if you're willing to use GLSL</p>
+                        </li>
+
+
+                    </ul>
+
+                    <!-- online editors -->
+
+                    <h5>online editors</h5>
+                    <p>I wanted to have the ability to edit the code and view the result and quickly hacked something
+                        but there are plenty of online editors too</p>
+
+
+                    <ul class="collection">
+
+                        <li class="collection-item">
+                            <a href="https://szymonkaliski.github.io/dacein/">dacein</a> is an experimental IDE and
+                            library for creative coding made by <a href="https://twitter.com/szymon_k">Szymon
+                                Kaliski</a>.
+                        </li>
+
+                        <li class="collection-item">
+                            <a href="https://editor.p5js.org/">P5</a> is the JavaScript version of <a
+                                href="https://processing.org/">Processing</a>, this editor let's you edit sketches in
+                            the browser
+                        </li>
+
+                        <li class="collection-item">
+                            <a href="https://codepen.io/">Codepen</a> has a versatile HTML/CSS/JS editor, along with
+                            gazillions of user contributed sketches
+                        </li>
+
+                        <li class="collection-item">
+                            <a href="https://glitch.com/edit/#!/">Glitch</a> is the the new kid on the block, rather
+                            than editing a single file, Glitch lets you edit a full project and manage your assets
+                        </li>
+
+                        <li class="collection-item">
+                            <a href="https://thebookofshaders.com/edit.php">the book of shaders</a> by <a
+                                href="https://twitter.com/patriciogv">Patricio Gonzalez Vivo</a> has a nice live reload
+                            editor to edit GLSL
+                        </li>
+
+                        <li class="collection-item">
+                            <a href="https://www.shadertoy.com/">Shadertoy</a> is where you go when you think you know
+                            GLSL and cry.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div id="about" class="section">
+
+                <div class="section">
+                    <a href="#home">
+                        <div class="btn black"><i class="material-icons">arrow_upward</i></div>
+                    </a>
+                    <h5>about</h5>
+                    <p>
+                        this is a collection of demos done by <a href="http://www.barradeau.com">Nicolas
+                            Barradeau</a>,
+                        it's meant to help newcomers understand the different aspects of creative coding and
+                        datavisualization.
+                    </p>
+                    <p>
+                        the code style is rather quaint, today (2019) one would probably use ES6 classes and tomorrow
+                        something different.
+                        the idea is to explain the underlying principles so that they can later be used in any language.
+                    </p>
+
+                    <p>
+                        the text editor uses <a href="https://codemirror.net/">codemirror</a> and the HTML is done with
+                        <a href="https://materializecss.com/">materialize css</a>.
+                    </p>
+                </div>
+
+                <div class="col">
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</body>
+
+<script src="js/app.js"></script>
+
+</html>

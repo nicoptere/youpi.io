@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>splines wall</title>
+    <meta name="description" content="interpolation entre 2 courbes en utilisant l'easing pour créer un motif">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+
+<body>
+
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="../base.js"></script>
+
+    <script src="../utils/Shaping.js"></script>
+
+    <script src="../utils/Cardinal.js"></script>
+    <script src="../utils/Catmullrom.js"></script>
+    <script src="../utils/Quadratic.js"></script>
+    <script src="../utils/Simplify.js"></script>
+
+    <script>
+        var G = new Graphics(ctx);
+
+        var origins = [];
+        var destinations = [];
+        function reset() {
+
+            ctx.fillStyle = "#FFF";
+            ctx.globalAlpha = 1;
+            ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = "#000";
+
+            origins = [];
+            destinations = [];
+            var step = 200;
+            for (var i = -step; i <= w + step; i += step) {
+                origins.push(new Point(i, h / 2 + (Math.random() - .5) * h / 2));
+                destinations.push(new Point(i + (Math.random() - .5) * step, h / 2 + (Math.random() - .5) * h / 2));
+            }
+
+            draw()
+        }
+        function draw() {
+
+            //computes 2 curves:
+
+            var precision = .01;
+            var c0 = Cardinal.compute(origins, precision, 1, false);
+            var c1 = Cardinal.compute(destinations, precision, 2, false);
+
+            // var c0 = Quadratic.compute( origins,         precision, false );
+            // var c1 = Quadratic.compute( destinations,    precision, false );
+
+            // var c0 = CatmullRom.compute( origins,         precision, false );
+            // var c1 = CatmullRom.compute( destinations,    precision, false );
+
+            ctx.lineJoin = "round";
+            ctx.lineWidth = 5;
+
+            // interpolates between the 2
+
+            for (var t = 0; t < 1; t += .005) {
+
+                ctx.globalAlpha = Shaping.square(t * 4.5) * .25;
+
+                var curve = [];
+                for (var i = 0; i < c0.length; i++) {
+
+                    var p0 = c0[i];
+                    var p1 = c1[i];
+
+                    //gets a point at T between P0 & P1
+                    curve.push(p0.pointAt(t, p1))
+
+                }
+                G.polyline(curve);
+
+            }
+
+        }
+        canvas.addEventListener('mousedown', reset);
+        reset();
+
+    </script>
+
+</body>
+
+</html>

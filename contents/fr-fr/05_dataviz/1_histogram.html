@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>histogramme</title>
+    <meta name="description" content="une façon simple et efficace (le cerveau les lit très facilement) de représenter des valeurs">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+
+    <script src="../base.js"></script>
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="CSVLoader.js"></script>
+    <script src="data_loader.js"></script>
+
+    <script>
+
+        function draw() {
+
+            requestAnimationFrame(draw);
+
+            ctx.restore();
+            ctx.save();
+            ctx.clearRect(0, 0, w, h);
+
+            resizeDataPoints()
+
+            // histogramme
+
+            temperatures.forEach(function (v0, i) {
+
+                //récupère la valeur de wind à cet index
+                var v1 = winds[i];
+
+                //si la valeur 0 est plus grande que la valeur 1
+                var h = v1.y - v0.y;
+                if (h < 0) {
+                    //dessine un bloc jaune
+                    ctx.fillStyle = "#FC0";
+                } else {
+                    //sinon dessine un bloc bleu
+                    ctx.fillStyle = "#09C";
+                }
+                ctx.fillRect(v0.x, v0.y, w / data.length, h);
+
+            });
+
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+@import "./codemirror.scss";
+@import "./custom.scss";
+@import "../../node_modules/materialize-css/sass/materialize.scss";
+
+html,
+body,
+.content {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-size: 15px;
+  line-height: 1.2em;
+  transition-timing-function: ease-out;
+  transition: 0.5s;
+  background-color: rgba(0, 0, 0, 0);
+  top:.1px;
+}
+
+.card .card-image img.lazy{}
+
+.CodeMirror {
+  height: 32em;
+}
+
+.fixed-action-btn.code-panel-close {
+  padding-top: 10px;
+  padding-right: 5px;
+  right: 0;
+  top: 0;
+  width: 48px;
+  height: 48px;
+}
+
+.test-frame {
+  visibility: hidden;
+  display: none;
+}
+
+.display-frame {
+  background-color: #ffffff;
+  width: 100%;
+  height: 100%;
+  resize: both;
+  border: 2px solid #cccccc;
+  border-left: 0;
+}
+.display-frame:after {
+  content: "";
+  bottom: 0;
+  right: 0;
+  cursor: ns-resize;
+  position: absolute;
+  z-index: 9;
+  width: 20px;
+  height: 20px;
+}
+.dropdown-content {
+  overflow: visible !important;
+  width: auto;
+}
+#editor .col,
+#editor .row {
+  padding: 0;
+}
+
+.text-block {
+  margin: 0;
+  border-left: 0;
+  border-top: 2px solid #cccccc;
+  border-right: 2px solid #cccccc;
+  padding-left: 0;
+}
+
+// auto compile switch color
+.neutral-blockquote {
+  border-left: 0;
+  line-height: 2em;
+  margin: 15px 20px 15px 20px;
+  border: 0;
+  padding: 0;
+}
+.switch label input[type="checkbox"]:checked + .lever {
+  background-color: #6998f0;
+}
+.switch label input[type="checkbox"]:checked + .lever:after {
+  background-color: #0050c8;
+}
+
+.parameters.row {
+  margin-bottom: 0;
+}
+.log-message {
+  // border-left: 0;
+  line-height: 2em;
+  margin: 15px 20px 15px 20px;
+  border: 0;
+  border-left: 5px;
+  // padding: 0;
+  margin-left: 1em;
+  padding-left: 1em;
+  border-color: #6998f0;
+}

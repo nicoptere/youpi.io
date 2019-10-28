@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>les filtres CSS</title>
+    <meta name="description"
+        content="en tant qu'élément du DOM, le canvas peut utiliser et combiner entre eux une batterie de filtre CSS">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+
+<body>
+
+    <script src="../base.js"></script>
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script>
+
+        var filterId = 0;
+        var filters = [
+            'click to loop through some filters',
+            'drop-shadow( 0 16px 8px grey)',
+            'brightness(1.5)',
+            'contrast(1.5)',
+            'saturate(2)',
+            'grayscale(1)',
+            'sepia(1)',
+            'invert(1)',
+            'hue-rotate(100deg)',
+            'blur( 20px )',
+		    'blur( 50px ) brightness(1.25) saturate(2)',
+            'saturate(2) grayscale(1) invert(1)',
+            'blur(10px) hue-rotate(180deg) brightness(1.5)',
+        ];
+
+        function draw() {
+
+            ctx.restore();
+            ctx.clearRect(0, 0, w, h);
+            ctx.save();
+            ctx.translate(w / 2, h / 2);
+
+            var filter = filters[filterId++ % filters.length];
+            ctx.font = "12pt Verdana";
+            ctx.fillText(filter, -img.width / 2, - img.height / 2 - 10);
+
+            ctx.filter = filter;
+            ctx.drawImage(img, -img.width / 2, - img.height / 2, img.width, img.height);
+
+        }
+
+        var img = new Image();
+        img.onload = function () {
+            img.width = img.height = Math.min(w, h) / 1.5
+            window.addEventListener('mousedown', draw);
+            draw();
+        };
+        img.src = "assets/images/balloons.jpg";
+
+    </script>
+</body>
+
+</html>

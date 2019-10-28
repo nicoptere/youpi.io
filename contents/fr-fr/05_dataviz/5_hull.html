@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>enveloppe convexe</title>
+    <meta name="description" content="trouve l'enveloppe convexe ; un polygone qui contient l'ensemble des points de donnée">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+
+
+    <script src="../base.js"></script>
+    <script src="../geom.js"></script>
+    <script src="../graphics.js"></script>
+    <script src="CSVLoader.js"></script>
+    <script src="data_loader.js"></script>
+
+    <script src="../utils/convexhull.js"></script>
+
+    <script>
+
+        function computeHull(points) {
+
+            if (points.length <= 3) return points;
+            points.sort(function (a, b) { return a.x - b.x; });
+            
+            var angle = Math.PI / 2;
+            var point = points[0];
+            var hull = [];
+            var max = points.length * 2;
+
+            while (point != hull[0] && max > 0) {
+
+                hull.push(point);
+                
+                var bestAngle = Math.pow(2, 53);
+                var bestIndex = 0;
+                for (var i = 0; i < points.length; i++) {
+
+                    var testPoint = points[i];
+                    if (testPoint == point) continue;
+
+                    var dx = testPoint.x - point.x;
+                    var dy = testPoint.y - point.y;
+                    var testAngle = Math.atan2(dy, dx) - angle;
+
+                    while (testAngle < 0) {
+                        testAngle += Math.PI * 2;
+                    }
+                    if (testAngle < bestAngle) {
+                        bestAngle = testAngle; bestIndex = i;
+                    }
+
+                }
+
+                point = points[bestIndex];
+                angle += bestAngle;
+                max--;
+            }
+            return hull;
+
+        };
+
+
+        function draw() {
+
+            requestAnimationFrame(draw);
+
+            ctx.restore();
+            ctx.save();
+            ctx.clearRect(0, 0, w, h);
+
+            resizeDataPoints()
+
+            //dessine un graphe des valeurs polarisées
+            var polar = [];
+            ctx.strokeStyle = "#CCC";
+            G.graduation(0, h / 2, w, h / 2, 40, 5);
+            G.graduation(w / 2, 0, w / 2, h, 30, 5);
+
+            data.forEach(function (obj, i) {
+                var a = i / data.length * PI2;//angle
+
+                var r = map(obj.t, t_min, t_max, h / 8, h / 2) * .85;//rayon
+                var p = new Point(w / 2 + Math.cos(a) * r, h / 2 + Math.sin(a) * r);
+                polar.push(p);
+
+                G.disc(p, 2);
+
+            });
+            G.polyline(polar, true);
+            polar.forEach(function (p) { G.disc(p, true); });
+
+            //dessine le convex hull en rouge
+            ctx.strokeStyle = "#f00";
+            G.polyline( computeHull(polar), true);
+            
+
+        }
+
+    </script>
+</body>
+
+</html>
