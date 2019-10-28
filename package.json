@@ -1,7 +1,7 @@
 {
   "name": "pyramyd-workshop",
   "version": "0.0.0",
-  "description": "the contents of a creative coding workshop for Pyramyd Formation in 2019",
+  "description": "the contents of youpi.io",
   "main": "electron_build.js",
   "scripts": {
     "start": "webpack-dev-server --open --config webpack.dev.js",
