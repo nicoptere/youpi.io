@@ -110,7 +110,7 @@ document.querySelectorAll('#theme_selector li').forEach( node => {
         css.setAttribute('href', "assets/css/" + name + ".css")
         document.head.appendChild(css)
       }
-      editor.editor.setOption('theme', name)
+      editor.setOption('theme', name)
       
   } )
 

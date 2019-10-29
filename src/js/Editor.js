@@ -5,7 +5,7 @@ import {
     EventType
 } from "./Events"
 
-let snap = false
+let thumb = false
 export default class Editor {
 
     get GL() {
@@ -15,8 +15,8 @@ export default class Editor {
         return "javascript"
     }
 
-    constructor(editorDomElement, path, snapshot = false) {
-        snap = snapshot
+    constructor(editorDomElement, path, thumbnail = false) {
+        thumb = Boolean( thumbnail ) == true
         
         //gets references to the dom
         this.textarea = editorDomElement.querySelector(".text-block")
@@ -96,6 +96,9 @@ export default class Editor {
     }
 
 
+    setOption(name, value) {
+        this.editor.setOption( name, value )
+    }
     onGLError(res) {
         let txt = res.data.split("\n")
         txt.pop()
@@ -124,7 +127,7 @@ export default class Editor {
         cm.style.height = height
         
         // to take screenshots
-        if( snap ){
+        if( thumb ){
             this.display_frame.style.width = "512px"
             this.display_frame.style.height = "512px"
         }
