@@ -6,7 +6,7 @@ import Editor from "./js/Editor";
 import {
   CARD_TEMPLATE,
   SECTION_TEMPLATE
-} from "./html/templates/templates"
+} from "./html/templates"
 
 
 
@@ -98,17 +98,23 @@ init the theme selector
 M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), {
   constrainWidth: false,
 });
-window.selectTheme = function (name) { //YOLO 
+document.querySelectorAll('#theme_selector li').forEach( node => {
 
-  if (name != "custom") {
-    let css = document.createElement("link")
-    css.setAttribute('rel', "stylesheet")
-    css.setAttribute('href', "assets/css/" + name + ".css")
-    document.head.appendChild(css)
-  }
-  editor.editor.setOption('theme', name)
+  node.addEventListener( 'click', (e)=>{
 
-}
+    let name = node.innerText
+    console.log(name)
+    if (name != "default") {
+        let css = document.createElement("link")
+        css.setAttribute('rel', "stylesheet")
+        css.setAttribute('href', "assets/css/" + name + ".css")
+        document.head.appendChild(css)
+      }
+      editor.editor.setOption('theme', name)
+      
+  } )
+
+})
 
 /*------------
 
@@ -152,10 +158,14 @@ let query = new URLSearchParams(url.search)
 if (query.has('locale')) LOCALE = query.get('locale')
 
 
-//creates the editor 
+/*------------
+
+create the editor
+
+------------*/
 
 let editorDomElement = document.getElementById("editor")
-let editor = new Editor(editorDomElement, LOCALE + "/", true ) 
+let editor = new Editor(editorDomElement, LOCALE + "/" ) 
 
 
 

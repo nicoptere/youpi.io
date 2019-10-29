@@ -39,8 +39,8 @@ export default class Editor {
                 name: this.JS,
                 // globalVars: true,
             },
-            theme: "custom",
-            // lineWrapping: true,
+            theme: "default",
+            lineWrapping: true,
 
             tabSize: 4,
             indentUnit: 4,

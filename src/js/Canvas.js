@@ -7,6 +7,7 @@ class Canvas {
         this.resizeHandler = this.resize.bind(this)
         this.parent = parent
 
+
         this.resize(w, h)
     }
 
@@ -25,6 +26,7 @@ class Canvas {
             this.resize()
 
         }
+
     }
     get parent() {
         return this.domElement.parentNode
