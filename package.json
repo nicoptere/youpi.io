@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "deploy": "webpack --config webpack.prod.js && electron ."
+    "electron": "webpack --config webpack.prod.js && electron ."
   },
   "devDependencies": {
     "clean-webpack-plugin": "^2.0.2",
