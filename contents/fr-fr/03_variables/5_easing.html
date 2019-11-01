@@ -7,10 +7,17 @@
     <title>Easing</title>
     <meta name="description" content="l'easing permet de varier la manière dont on interpole entre deux valeurs">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
+    <style>
+        #instructions {
+            position: absolute;
+            top: 1em;
+            left: 1em;
+        }
+    </style>
 </head>
 
 <body>
+    <div id="instructions">clicker ici pour afficher l'easing suivant</div>
 
     <script src="../base.js"></script>
     <script src="../geom.js"></script>
@@ -24,7 +31,7 @@
             requestAnimationFrame(draw);
             ctx.clearRect(0, 0, w, h);
 
-            // on sotcke les valeurs des coins (gauche/droite/haut/bas)
+            // on stocke les valeurs des coins (gauche/droite/haut/bas)
 
             let left = 100
             let right = w - 100
@@ -33,11 +40,39 @@
             let width = w - 200
             let height = h - 200
 
-            //calcule une variable d'oscillation
-            var T = .5 + Math.sin(performance.now() * 0.001) * .5;
+            //on calcule une variable d'oscillation 
+            var T = Math.sin(performance.now() * 0.001);
+
+            //on la mappe entre 0 et 1
+            T = .5 + T * .5
+
 
             //choisit une formule d'easing 
+            var easingName = names[easingId]
             var fc = Easing[easingName];
+
+            //calcule la valeur d'easing à T
+            var E = fc(T)
+
+            // et on l'affiche en haut
+
+            console.log("easing ", easingName, "à T:", T.toFixed(2), " = E:", E.toFixed(2))
+
+
+            /*
+            on remarque deux choses:
+             - les deux variables sont normalisées (comprises entre 0 et 1)
+             - sauf avec l'easing "linear" les deux variables ne suivent pas la même progression
+
+            c'est tout l'intérêt de l'easing, une variable bouge linéairement 
+            et produit un résultat non linéaire
+
+
+
+            ce sera plus parlant en image  :)
+            */
+            
+            return
 
             //écrit le nom de l'easing en haut à gauche
             ctx.fillStyle = "#000";
@@ -49,10 +84,7 @@
             G.line(x, top, x, bottom);
             G.disc(x, top, 5);
 
-
-            //calcule la valeur d'easing à T
-            var E = fc(T)
-
+ 
             /*
             E est compris entre 0 et 1 
             on interpole la valeur de E entre le bas et le haut
@@ -60,8 +92,6 @@
             var y = lerp(E, bottom, top);
             ctx.fillStyle = "#F00";
             G.disc(x, y, 5)
-
-            return
 
             /*
             pour mieux voir on peut dessiner la courbe entière 
@@ -79,28 +109,45 @@
             return
 
             //on peut également représenter la variation sous forme de rectangle 
-            ctx.fillRect(w - 75, bottom, 20, - ( E * height ) );
+            ctx.fillRect(w - 75, bottom, 20, - (E * height));
 
             //ou de disque
-            G.disc(w / 2, bottom + 50, E * 30);
+            ctx.fillStyle = "#06C";
+            ctx.globalCompositeOperation = "darken"
+            G.disc(w / 2, h/2, E * width/2);
+
+            return
+
+            // mais surtout, puisque lé résulta du easing est normalisé , 
+            // on peut utiliser le résultat E du easing de T pour créer un nouveau Easing 
+
+            // par exemple:
+            // on applique un easing au résultat du premier easing
+
+            E = Easing.inOutExpo( E )
+
+            //et on deesine un cercle jaune qui apparîtra en décalé 
+            ctx.fillStyle = "#FC0";
+            ctx.globalCompositeOperation = "lighter"
+            G.disc(w / 2, h/2, E * width/2);
 
         }
 
-        var easingId = -1;
+        //stocke les noms de easings
+        var names = []
+        for (var key in Easing) {
+            names.push(key);
+        }
+
+        var easingId = 0;
         var easingName = "";
+        //cycle sur les valeurs d'easing
         function onMouseDown(e) {
-
             easingId++;
-            easingId %= 21;
-            var id = 0;
-            for (var key in Easing) {
-                if (id++ != easingId) continue;
-                easingName = key;
-            }
-
+            easingId %= names.length;
         }
         canvas.addEventListener('mousedown', onMouseDown, false);
-        onMouseDown();
+
         draw();
 
     </script>
