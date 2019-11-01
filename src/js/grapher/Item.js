@@ -39,7 +39,7 @@ export default class Item {
         //prevent stack overflow (recursive call to self )
         var reg = new RegExp("\b(" + name + ")\b", "gi" );
         if( reg.test( this.method ) ){
-            console.log( "invalid: recursion")
+            console.log( 'item.update: invalid recursion ')
             this.valid = false;
             return;
         }
@@ -49,7 +49,7 @@ export default class Item {
             functions[name]( 1 );
             this.valid = true;
         }catch(e){
-            console.log( name, "not valid ", e)
+            console.log( 'item.update:', name, "not valid ", e)
             this.valid = false;
             return;
         }
