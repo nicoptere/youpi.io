@@ -4,12 +4,13 @@ export default class storage {
     static init( main ){
 
         //rebuilds formulas if they were stored locally
-        var customMethods = JSON.parse( localStorage.getItem('customMethods') );
+        var storedItems = JSON.parse( localStorage.getItem('storedItems') );
 
-        if( customMethods !== null && customMethods.length > 0 ){
+        if( storedItems !== null && storedItems.length > 0 ){
 
-            customMethods.forEach( function(s){
-                main.addNew(s);
+            storedItems.forEach( function(it){
+                let item = main.addNew(it.method)
+                item.active = it.active
             });
 
         }else{
@@ -24,8 +25,16 @@ export default class storage {
 
     static update(items){
 
-        //saves the customMethods locally to display something on load
-        localStorage.setItem('customMethods', JSON.stringify( items.map( (item) => { return item.method; } ) ) );
+        //saves the storedItems locally to display something on load
+        
+        let array = items.map( (item) => {
+            return {
+                 active:item.active,
+                 method:item.method 
+                } 
+            } )
+        let str = JSON.stringify( array );
+        localStorage.setItem('storedItems', str );
 
 
     }

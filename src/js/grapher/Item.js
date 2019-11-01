@@ -12,36 +12,34 @@ export default class Item {
 
     constructor( ui, str ){
 
-        this.id = Item.id;
-
-        let name = this.name;
-
-        ui.createItem( this, name, str )
-
+        this.id = Item.id++;
+        this.method = str || "x";
+        ui.createItem( this )
         this.active = true
-        this.method = str;
-        this.update();
-        Item.id++;
 
     }
 
     update( ){
 
         let name = this.name;
-        // this.label.innerText = "\t" + name + "\t";
-
 
         this.picto.style.visibility = "visible";
         this.picto.style.display = "block";
         this.picto.icon.innerText = ( this.active ) ? "visibility" : "visibility_off" ;
 
+        this.label.innerText = name.toLowerCase()
         this.selected = document.activeElement === this.textField;
-
-        this.method = this.textField.value.replace( /\s\s+/g, ' ' );//remove duplicate spaces
+        
+        //remove duplicate spaces
+        this.method = this.textField.value.replace( /\s+/g, ' ' );
+        this.deleteBtn.style.backgroundColor = 
+        this.picto.style.backgroundColor = 
+        this.inlineBtn.style.backgroundColor = this.color
 
         //prevent stack overflow (recursive call to self )
-        var reg = new RegExp( "\\b(" + name + ")\\b\\s*\\(", "gi" );
+        var reg = new RegExp("\b(" + name + ")\b", "gi" );
         if( reg.test( this.method ) ){
+            console.log( "invalid: recursion")
             this.valid = false;
             return;
         }
@@ -51,12 +49,14 @@ export default class Item {
             functions[name]( 1 );
             this.valid = true;
         }catch(e){
+            console.log( name, "not valid ", e)
             this.valid = false;
             return;
         }
-        functions.dictionary[name] = this.method;
 
+        functions.dictionary[name] = this.method;
         this.canInline;
+
     }
 
     //accessors
@@ -75,7 +75,7 @@ export default class Item {
     get method(){ return this._method; }
     set method( value ){
         this._method = value;
-        this.textField.value = value;
+        if( this.textField != null ) this.textField.value = value;
     }
 
     get selected(){ return this._selected; }
@@ -85,23 +85,15 @@ export default class Item {
     set valid( value ){
         this._valid = value;
         if( !value )this.picto.icon.innerText = "warning"
-        // this.picto.style.visibility = "hidden";
-        // if( value ) {
-        //     this.picto.style.visibility = "hidden";
-        //     this.picto.style.display = "none";
-        // }else{
-        //     this.picto.style.visibility = "visible";
-        //     this.picto.style.display = "block";
-        // }
     }
 
     get canInline(){
         let reg = /\b[a-z]([0-9].*)?\b\s?\(/gi;
         if( reg.test( this.method ) === true ){
-            this.inlineBtn.style.visibility = 'visible';
+            this.inlineBtn.classList.remove('hidden')
             return true;
         }
-        this.inlineBtn.style.visibility = 'hidden';
+        this.inlineBtn.classList.add('hidden')
         return false;
     }
 }

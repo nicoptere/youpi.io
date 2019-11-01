@@ -2,10 +2,9 @@ import Renderer from "./Renderer";
 import Item from "./Item";
 import functions from "./functions";
 import storage from "./storage";
-import Draggable from "./Draggable";
 import Inline from "./parser/Inline";
 
-let startTime;
+let startTime, interval;
 export default class Grapher {
 
     constructor( domElement, width = -1, height = -1 ){
@@ -16,7 +15,7 @@ export default class Grapher {
             height = 512;
         }
         this.container = domElement;
-        this.container.classList.add("graphHolder");
+        // this.container.classList.add("graphHolder");
 
         if( width === -1 && height === -1 ){
 
@@ -26,32 +25,27 @@ export default class Grapher {
             height = size;
 
         }
+        width -= 24
+        height -= 24
 
         this.renderer = new Renderer( this, Math.max( 256, width ), Math.max( 256, height ) );
-
-        new Draggable(this.renderer.holder, domElement);
-
         this.items = [];
 
         functions.init();
 
         storage.init(this);
 
-        this.startTime = Date.now();
+        this.startTime = performance.now();
 
     }
 
     addNew( x ){
 
         let item = new Item( this.renderer.ui, x );
-
+        this.items.push( item );
         item.deleteBtn.addEventListener("mousedown", ()=>{this.dispose(item);} );
         item.inlineBtn.addEventListener("mousedown", ()=>{this.inline(item);} );
-
-        this.items.push( item );
-
-        this.container.appendChild(item.domeElement);
-
+        this.container.appendChild(item.domElement);
         return item;
 
     }
@@ -64,8 +58,7 @@ export default class Grapher {
             //if so, inlines the item's method
             toInline.method = Inline.compute(toInline.method);
             toInline.update();
-            toInline.removeInlineButton();
-
+            
         }
 
     }
@@ -77,11 +70,12 @@ export default class Grapher {
 
         //new re-indexed list
 
+        // console.log( this.items.map((i)=>{ return i.name + " "+ i.id + " " + i.color }) )
         let id = 0;
         let newItems = this.items.filter( (it)=>{
 
             it.textField.classList.remove("highlight-text-field");
-
+            
             if( it.id !== toDelete.id ){
 
                 //name is dynamically computed from the id
@@ -100,19 +94,24 @@ export default class Grapher {
                 it.id = tmpId;
 
                 return it;
-            }
-        });
 
+            }
+
+        });
+        
         //checks if the method to delete is used by other methods
-        let reg = new RegExp( "\\b(" + toDelete.name + ")\\b\\s*\\(", "gi" );
+        // let reg = new RegExp( "(?<![\w\d])" + toDelete.name + "(?![\w\d])", "g" );
+        let reg = new RegExp( "\b(" + toDelete.name + ")\b", "g" );
         let usage = [];
         this.items.forEach((s)=>{
+            console.log( toDelete.name, s.method , s.method.match( reg ) )
             if( s.name === toDelete.name ) return;
             if( reg.test( s.method ) === true ){
+                
                 usage.push( s );
             }
         });
-
+        
         //if so, highlights the fields where it is used
         if( usage.length > 0 ){
             console.warn( "item in use, you should fix the usage of "+ toDelete.name +" before deleting");
@@ -143,12 +142,13 @@ export default class Grapher {
 
             });
             s.id = s.newId;
+            s.update()
             delete s.newId;
             delete s.newName;
             Item.id++;
 
         });
-        this.container.removeChild( toDelete.domeElement );
+        this.container.removeChild( toDelete.domElement );
 
         this.items = newItems;
         storage.update(this.items);
@@ -156,17 +156,34 @@ export default class Grapher {
 
     }
 
+    start( ){
+        this.update()
+    }
 
-
+    stop( ){
+        cancelAnimationFrame(interval)
+    }
 
     update(){
 
-        window.time = ( Date.now() - this.startTime ) * .001;
+        interval = requestAnimationFrame( this.update.bind(this))
+
+        window.time = ( performance.now() - this.startTime ) * .001;
+
+        //evaluates everything
+        
+        // console.log( this.items.map((i)=>{ return i.name + " "+ i.id + " " + i.method }) )
+        this.items.forEach( ( item )=>{
+           let name = item.name;
+           try{
+               eval("window[name] = functions[name] = function(x){ return "+ item.method +"; }; " );
+            }catch(e){
+                return
+            }
+        })
 
         this.items.forEach( ( item )=>{
-
             item.update( time );
-
         } );
 
         storage.update(this.items);

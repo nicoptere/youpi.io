@@ -7,7 +7,6 @@
     <title>Youpi!</title>
     <meta name="description" content="it's dangerous to go alone! take this. ️🗡️">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 </head>
@@ -25,12 +24,8 @@
                 <div class="nav-wrapper black">
                     <div class="row">
                         <div class="col">
-                            <a href="#" class="open-code-btn"><i class="material-icons">code</i></a>
+                            <a class="open-code-btn"><i class="material-icons">code</i></a>
                         </div>
-
-                        <!-- <div class="col s3 m3 l3 ">
-                            <a href="#">it's dangerous to go alone! take this.</a>
-                        </div> -->
 
                         <div class="col nav-tabs-list">
                         </div>
@@ -96,6 +91,14 @@
                         </div>
 
                         <div class="col">
+                            <blockquote class="neutral-blockquote">
+                                <a class='functions white'>
+                                    <i class="material-icons" style="vertical-align: middle;">functions</i>
+                                </a>
+                            </blockquote>
+                        </div>
+
+                        <div class="col">
 
                             <blockquote class="neutral-blockquote">
                                 <label>
@@ -104,22 +107,6 @@
                                 </label>
                             </blockquote>
 
-                        </div>
-
-                        <div class="col">
-                            <blockquote class="neutral-blockquote">
-                                <a href="#" class='forward forawrd_button white'>
-                                    <i class="material-icons" style="vertical-align: middle;">forward</i>
-                                </a>
-                            </blockquote>
-                        </div>
-
-                        <div class="col">
-                            <blockquote class="neutral-blockquote">
-                                <a href="#" class='functions white'>
-                                    <i class="material-icons" style="vertical-align: middle;">functions</i>
-                                </a>
-                            </blockquote>
                         </div>
 
                         <div class="col">
@@ -132,15 +119,9 @@
                     </div>
 
                     <div class="row">
-                        <div class="col s12">
-                            <div class="graph"></div>
-                        </div>
-                    </div>
-
-                    <div class="row">
 
                         <!-- editor frame -->
-                        <div class="col s6">
+                        <div class="code col s6">
 
                             <!-- editor textarea -->
                             <blockquote class="text-block" contenteditable="true"></blockquote>
@@ -148,17 +129,38 @@
                         </div>
 
                         <!-- result frame -->
-                        <div class="col s6">
+                        <div class="result col s6">
 
                             <iframe class="test-frame"></iframe>
                             <iframe class="display-frame"></iframe>
 
                         </div>
+
+                        <!-- next button -->
+                        <div class="forward-btn col s12">
+                            <a class='forward btn-floating black'>
+                                <i class="material-icons">forward</i>
+                            </a>
+                        </div>
+
+                        <!-- switch button -->
+                        <div class="switch-btn col s12">
+                            <a class="switch-panels-btn btn-floating black">
+                                <i class=" medium material-icons">repeat</i>
+                            </a>
+                        </div>
+
                     </div>
 
                 </div>
             </ul>
 
+            <!-- graph utility -->
+            <div class="row">
+                <div class="col s12">
+                    <div class="graphHolder hidden"></div>
+                </div>
+            </div>
         </div>
 
         <!-- page content-->

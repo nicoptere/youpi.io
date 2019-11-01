@@ -3,8 +3,6 @@ export default class UI{
 
     constructor( main, container ){
 
-        this.createCSS();
-
         let domElement = document.createElement('div');
         domElement.setAttribute("name", "UI");
         this.domElement = domElement;
@@ -33,7 +31,7 @@ export default class UI{
             el.name = "range";
             el.value = i;
             el.setAttribute("id", str);
-            el.checked = i === a.length - 1;
+            el.checked = i === 0;
             la.appendChild(el);
 
             let sp = document.createElement("span");
@@ -46,31 +44,46 @@ export default class UI{
         //to create items
         this.itemRow = this.getRow(domElement)
 
-
-        /*
-
-        let c = this.getColumn(this.itemRow, 12)
-        let tabs = document.createElement("ul")
-        tabs.classList.add( "tabs" )
-        this.tabs = tabs
-        c.appendChild( tabs )
-        this.addTab( "a", "value a" )
-        this.addTab( "b", "value b" )
-        M.Tabs.init(tabs);
-        
     }
 
-    addTab( name, value ){
+    createItem( item ){
 
-        let id = this.tabs.querySelectorAll(".li").length
+        let row, c;
+        row = this.getRow(this.itemRow);
+        item.domElement = row;
 
-        let li = `<li class="tab col"><a href="#tab_${id}" data-value="${value}"><div class="btn">${name}</div></a></li>`
-        this.tabs.insertAdjacentHTML('beforeend', li )
+        c = this.getColumn(row,1)
+
+        let picto = this.getPicto( c, "warning", item, "show/hide" )
+        picto.addEventListener("mousedown", ()=>{
+            item.active = !item.active
+        }, false)
+
+        c = this.getColumn(row,1)
+        let deleteBtn = this.getPicto( c, "close", item, "delete this function" )
+
+        c = this.getColumn(row,1)
+        let label = this.getLetter( c, item.name, "#000"  )
+
+        c = this.getColumn(row,8)        
+        let textField = document.createElement( 'input' );
+        textField.style.height = "2.4em";
+        textField.style.marginLeft = "16px";
+        textField.type = "text";
+        textField.tabIndex = item.id + 1;
+        textField.value = item.method;
+        c.appendChild(textField);
         
-        let div = `<div id="tab_${id}" class="col s12">${value}</div>`
-        this.tabs.parentNode.parentNode.insertAdjacentHTML('beforeend', div )
-        //*/
-        
+        c = this.getColumn(row,1)
+        let inlineBtn = this.getPicto( c, "keyboard_return", item, "inline this function" )
+        inlineBtn.classList.add('hidden');
+
+        item.picto = picto
+        item.label = label
+        item.textField = textField
+        item.deleteBtn = deleteBtn
+        item.inlineBtn = inlineBtn
+        return
     }
 
     getRow( parent ){
@@ -101,148 +114,30 @@ export default class UI{
         return el
     }
 
-    getPicto( parent, type, color="black" ){
+    getPicto( parent, type, item, title="" ){
 
         let el = document.createElement("div")
         el.classList.add( "btn-floating" )
         el.classList.add( "btn-small" ) 
-        el.style.backgroundColor =  color
+        el.style.backgroundColor = item.color
         parent.appendChild(el)
         
+        let a = document.createElement("a")
+        a.setAttribute("title", title)
+        el.appendChild(a)
+
         let i = document.createElement("i")
         i.classList.add( "material-icons")
         i.innerText = type 
-        el.appendChild(i)
+        a.appendChild(i)
 
         el.icon = i
         return el
     }
 
 
-    createItem( item, name, str ){
-
-        let row, c;
-        let domElement = item.domeElement = row = this.getRow(this.itemRow);
-
-
-
-        c = this.getColumn(row,1)
-        let label = this.getLetter( c, name, item.color  )
-
-        c = this.getColumn(row,1)
-        let picto = this.getPicto( c, "warning", item.color )
-        picto.addEventListener("mousedown", ()=>{
-            item.active = !item.active
-        }, false)
-
-        c = this.getColumn(row,1)
-        let deleteBtn = this.getPicto( c, "close", item.color )
-
-        c = this.getColumn(row,1)
-        let inlineBtn = this.getPicto( c, "keyboard_return", item.color )
-
-
-        let textField = document.createElement( 'input' );
-        textField.type = "text";
-        textField.tabIndex = item.id + 1;
-        textField.value = str;
-        domElement.appendChild(textField);
-        
-
-        item.picto = picto
-        item.label = label
-        item.textField = textField
-        item.deleteBtn = deleteBtn
-        item.inlineBtn = inlineBtn
-        return
-    }
-
     get range(){
         return parseFloat( this.domElement.querySelector('input[name=range]:checked').value );
-    }
-
-    createCSS(){
-
-        //this creates a CSS file, the hard way.
-        var css = document.createElement('style');
-        css.type = 'text/css';
-        css.appendChild(document.createTextNode(`
-        
-            .graphHolder{
-                overflow:hidden;
-                resize: both;
-                z-index: 10;
-                position.absolute;
-                border: 1px solid #EEE;
-            }
-            .graph-header{
-                width : 100%;
-                height : 8px;
-                background-color : #eeeeee;
-                display : block;
-                color : #CCCCCC;
-                z-index : 10;
-            }
-            .item{
-                width:100%;
-                display: flex;
-                align-items: center;
-            }
-            .invalid{" +
-                pointer-events: none;
-                position:absolute;
-                border-style: solid;
-                border-width: 0 8px 16px 8px;
-                border-color: transparent transparent #CC0000 transparent;
-            }
-            
-            .resize{
-                overflow:hidden;
-                resize: vertical;
-                border: 1px solid #EEE;
-            }
-            input[type=text]{
-                -webkit-transition: all 0.5s;
-                transition: all 0.5s;
-            }
-            input[type=text], input[type=button] {
-                padding: 6px 10px;
-                width: auto;
-                margin: 4px 0;
-                box-sizing: border-box;
-                // border: 1px solid #EEE;
-                outline: none;
-            }
-            
-            input[type=color] {
-                padding:2px;
-                margin:0 8px 0 8px;
-                height:30px;
-                width:30px;
-                border: 0;
-            }
-            
-            input[type=text]:focus {
-                width: 100%;
-                border: 1px solid #AAA;
-            }
-            .highlight-text-idle{
-                border: 1px solid #EEE;
-            }
-            
-            .highlight-text-field{
-                border: 1px solid #D00;
-            }
-            
-            input[type=button]{
-                background-color:#EEEEEE;
-            }
-            
-            input[type=button]:hover {
-                background-color:#F6F6F6;
-            }`
-        ));
-        document.head.appendChild(css);
     }
 
 }

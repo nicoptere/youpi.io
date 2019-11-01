@@ -15,14 +15,16 @@ export default class Editor {
         return "javascript"
     }
 
-    constructor(editorDomElement, path, thumbnail = false) {
+    constructor( path, thumbnail = false) {
+        //true if we taking snapshots for the thumbnails (512*512px)
         thumb = Boolean( thumbnail ) == true
         
         //gets references to the dom
-        this.textarea = editorDomElement.querySelector(".text-block")
-        this.test_frame = editorDomElement.querySelector(".test-frame")
-        this.display_frame = editorDomElement.querySelector(".display-frame")
-        this.parameters = editorDomElement.querySelector(".parameters")
+        this.textarea = document.querySelector(".text-block")
+        this.test_frame = document.querySelector(".test-frame")
+        this.display_frame = document.querySelector(".display-frame")
+        this.parameters = document.querySelector(".parameters")
+
         this.auto = this.parameters.querySelector(".auto-compile")
         this.error = this.parameters.querySelector(".error-message")
         this.log = this.parameters.querySelector(".log-message")
@@ -40,7 +42,7 @@ export default class Editor {
                 // globalVars: true,
             },
             theme: "default",
-            lineWrapping: true,
+            // lineWrapping: true,
 
             tabSize: 4,
             indentUnit: 4,
@@ -172,12 +174,16 @@ export default class Editor {
 
     }
 
-    reset(source, args) {
+    reset(source=null, args=null) {
 
         if (this.loading == true) return
         this.loading = true
-
         this.clearIframe(this.display_frame, this.loopKeys)
+        
+        if( source == null ){
+            this.loading = false
+            return
+        }
 
         if (typeof source == "string") {
 
@@ -189,9 +195,7 @@ export default class Editor {
             xhr.onload = function (e) {
 
                 let content = scope.sanitize(e.target.responseText, args)
-
                 scope.editor.setValue(content)
-
                 scope.log.innerText = ""
                 scope.loading = false
 
@@ -289,11 +293,10 @@ export default class Editor {
         document.write(content);
         document.close();
 
-        //applies default style
+        //applies a default style
         let style = "head,body{width:100%;height:100%;overflow:hidden;margin:0;padding:0;}"
         let styleTag = document.head.querySelector("style")
         if( styleTag == null ){
-
             document.head.innerHTML = "<style>" + style + "</style>"
         }else{
             styleTag.innerHTML += style
@@ -308,6 +311,10 @@ export default class Editor {
         }
         this.updateIframe(frame, '')
 
+    }
+    
+    update(){
+        this.updateContent(this.editor.getValue() )
     }
 
     updateContent(content) {
@@ -331,17 +338,11 @@ export default class Editor {
 
         //store the script tags for evaluation 
         let scripts = []
-        let scriptTags = this.test_frame.contentWindow.document.querySelectorAll("script")
+        let scriptTags = document.querySelectorAll("script")
         for (let i = 0; i < scriptTags.length; i++) {
             scripts.push( scriptTags[i] )
         }
-
-        // //adds a callback function
-        // let endScript = document.createElement( 'script' )
-        // endScript.innerText = 'window.onload = function(){ console.log( "OH YEAH" ); }'
-        // scripts.push(endScript)
-        // console.log( scripts, scriptTags )
-
+        
         //clears the loops started in the test frame
         this.clearIframe(this.test_frame, loops.keys)
         
@@ -354,6 +355,7 @@ export default class Editor {
             let txt = scripts[i].innerText
             if( txt == '' )continue
             try {
+
                 this.test_frame.contentWindow.eval(txt)
 
             } catch (error) {

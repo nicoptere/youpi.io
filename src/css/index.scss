@@ -15,7 +15,9 @@ body,
   background-color: rgba(0, 0, 0, 0);
   top:.1px;
 }
-
+a{
+  cursor: pointer;
+}
 .card .card-image img.lazy{}
 
 .CodeMirror {
@@ -29,6 +31,19 @@ body,
   top: 0;
   width: 48px;
   height: 48px;
+}
+.forward-btn{
+  position: fixed;
+  z-index: 50;
+  top: 50%;
+  text-align: center;
+}
+
+.switch-btn{
+  position: fixed;
+  z-index: 50;
+  bottom: 5em;
+  text-align: center;
 }
 
 .test-frame {
@@ -99,4 +114,37 @@ body,
   margin-left: 1em;
   padding-left: 1em;
   border-color: #6998f0;
+}
+
+.hidden{
+  display:none;
+  visibility: hidden;
+}
+
+
+.graphHolder{
+  resize: both;
+  position: absolute;
+  width:512px;
+  min-width:512px;
+  max-width:512px;
+  z-index: 1000;  
+  padding:1em;
+  background-color: white;
+  padding-top:.2em;
+  border: 1px solid #EEE;
+  overflow-y:scroll;
+  overflow-x:hidden;
+}
+.graphHolder div.row{
+  margin-bottom: 8px;
+  font-size: 1em;
+  line-height: 1em;
+  background-color: white;
+}
+
+.resize{
+  overflow:hidden;
+  resize: vertical;
+  border: 1px solid #EEE;
 }
