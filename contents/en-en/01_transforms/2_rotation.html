@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    
+
     <meta charset="UTF-8">
     <title>rotation autour d'un point</title>
     <meta name="description" content="pivote un ensemble de points autour d'un autre point (lattice)">
@@ -22,9 +22,8 @@
         function reset() {
 
             ctx.clearRect(0, 0, w, h);
-
-            // on fait bouger un point "count" fois linéairement en X
-            // aléatoirement en Y et on stocke les positions dans un tableau 'points'
+            // we move a point "count" times linearly in X
+            // randomly in Y and we store the positions in a table 'points'
 
             var count = 256;
             var steplength = 10;
@@ -32,8 +31,8 @@
             var points = [];
             for (var i = 0; i < count; i++) {
 
-                //il faut soit cloner soit créer un nouveau point
-                //ici on clone
+                // you have to either clone or create a new point
+                // here we clone
                 points.push(p.clone());
 
                 p.x += steplength;
@@ -41,32 +40,32 @@
 
             }
 
-            //et on la desine, ce sera le motif à faire tourner autour d'un centre
+            // and we design it, it will be the motive to rotate around a center
             G.polyline(points);
 
             return;
 
             ctx.clearRect(0, 0, w, h);
 
-            var colors = ["#666", "#06C", "#C06", "#FC0"]
+            var colors = ["# 666", "# 06C", "# C06", "# FC0"]
             for (var n = 0; n < colors.length; n++) {
 
-                //commenter pour afficher les 4 couleurs
+                // comment to display the 4 colors
                 if (n > 0) {
                     continue
                 }
 
-                //on assigne une couleur 
+                // we assign a color
                 ctx.strokeStyle = colors[n]
 
-                //on sauve l'état du contexte
+                // save the state of the context
                 ctx.save()
 
-                //on bouge le centre du canvas aléatoirement dans la page
+                // we move the center of the canvas randomly in the page
 
                 ctx.translate(Math.random() * w, Math.random() * h);
 
-                //puis on applique une série de rotations autour d'un point
+                // then we apply a series of rotations around a point
 
                 var rotations = 64;
                 var angleStep = Math.PI * 2 / rotations;
@@ -80,23 +79,10 @@
                 ctx.restore()
 
             }
-
         }
         window.addEventListener('mousedown', reset);
         reset()
-        function circle(x, y, r) {
-            ctx.beginPath();
-            ctx.arc(x, y, r, 0, Math.PI * 2);
-            ctx.stroke();
-        }
 
-        function renderLine(points) {
-            ctx.beginPath();
-            points.forEach(function (p) {
-                ctx.lineTo(p.x, p.y);
-            });
-            ctx.stroke();
-        }
     </script>
 
 </body>

@@ -151,16 +151,22 @@ export default class Editor {
         var re = new RegExp("(^\s."+EOL+"){2,}", "gm");
         text = text.replace(re, EOL )
 
+        //reformat comments and others symbols broken by translation (better have a clean translation but hey...)
+        text = text.replace(/\/\s\*/gmi, '/*' )
+        text = text.replace(/#\s/gmi, '#' )
+        text = text.replace(/\*\s\//gmi, '*/' )
+        text = text.replace(/(\*|\+|-|!|<|>)\s=/gmi, '$1=' )
+
         //reformat tabs
         text = text.replace(/    /gm, '\t')
         text = text.replace(/^\t\t/gm, '\t')
         text = text.replace(/\t(<\/|<)script/gm, '$1script')
 
         //change PATH
-        text = text.replace(/(href="|src=")/gm, '$1' + path)
+        // text = text.replace(/(href="|src=")/gm, '$1' + path)
         
-        // bring return and continue statemetns to the beginning of line
-        text = text.replace(/^\s.*(return|continue|break)[;\s]*$/gm, '\t$1'+EOL)
+        // // // bring return and continue statemetns to the beginning of line
+        // text = text.replace(/^\s.*(return|continue|break)[;\s]*$/gm, '\t$1'+EOL)
 
         //restores relatives path 
         re = new RegExp( path + '\.\.\/', 'gm' )

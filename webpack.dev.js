@@ -7,6 +7,9 @@ module.exports = merge(common, {
     mode: 'development',
     devtool: 'inline-source-map',
     devServer: {
-        contentBase: [output_dir, path.join(__dirname, 'src/assets')]
+        contentBase: [
+            output_dir, 
+            path.join(__dirname, 'src/assets')
+         ]
     }
 });

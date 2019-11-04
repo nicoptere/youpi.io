@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>line</title>
+    <meta name="description" content="drawing lines, lines properties, colors, thickness, endigs">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    
+</head>
+
+<body>
+    <script src="code/base.js"></script>
+    <script>
+
+        // a class point that stores 2 coorodnates X and Y
+                var Point = function (x, y) {
+            this.x = x || 0;
+            this.y = y || 0;
+        };
+
+        // a drawing method to draw in a loop
+        function draw () {
+            requestAnimationFrame (draw);
+
+            ctx.clearRect (0, 0, w, h);
+            ctx.restore ();
+            ctx.save ();
+
+            // create 2 points centered vertically (h / 2):
+
+            // P0: to 100 px on X (= on the left)
+            // P1: to (width of the screen - 100px) (= on the right)
+
+            var p0 = new Point (100, h / 2);
+            var p1 = new Point (w - 100, h / 2);
+
+
+            // we start a new form:
+            // a series of drawing instructions
+            ctx.beginPath ();
+
+            // record a command saying:
+            // "send the 'pencil' to the coordinates of the first point without drawing"
+            ctx.moveTo (p0.x, p0.y);
+
+            // record a command saying:
+            // "draw a line up to the coordinates of the second point"
+            ctx.lineTo (p1.x, p1.y);
+
+            // and finally we say to draw the line
+            ctx.stroke ();
+
+            return;
+
+            / *
+
+            // the style
+
+            context several options for drawing lines.
+            the most important are:
+
+             - ctx.lineWidth = line thickness (default 1)
+
+             - ctx.strokeStyle = line color (default #000000)
+
+             - ctx.lineCap = butt | round | square (default 'butt')
+
+             - ctx.lineJoin = mitter | round | bevel (default 'mitter')
+
+
+             /! \ these options must be set before calling ctx.stroke ()
+
+            * /
+
+            // we can change the style here
+            ctx.lineWidth = 10;
+
+            // we start a new form
+            ctx.beginPath ();
+            ctx.moveTo (p0.x, p0.y);
+            ctx.lineTo (p1.x, p1.y);
+
+            // or change it there
+            ctx.strokeStyle = "#f00";
+
+            // say to draw the line
+            ctx.stroke ();
+
+            // but if we assign this style (4px yellow) after drawing, it's too late :)
+
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "#FF0";
+
+            return;
+
+            // on the other hand we can redraw the series of instructions with the new style
+            ctx.stroke ();
+
+            return;
+
+            // the lines also have a lineCap property that indicates how the line ends:
+
+            var lineWidth = 50;
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = "#06C" // blue
+
+            // test the 3 possible line endings
+
+            //high
+            ctx.lineCap = "butt";
+
+            ctx.beginPath ();
+            ctx.moveTo (p0.x, p0.y - lineWidth * 3);
+            ctx.lineTo (p1.x, p1.y - lineWidth * 3);
+            ctx.stroke ();
+
+            //middle
+            ctx.lineCap = "round";
+
+            ctx.beginPath ();
+            ctx.moveTo (p0.x, p0.y);
+            ctx.lineTo (p1.x, p1.y);
+            ctx.stroke ();
+
+            //low
+            ctx.lineCap = "square";
+
+            ctx.beginPath ();
+            ctx.moveTo (p0.x, p0.y + lineWidth * 3);
+            ctx.lineTo (p1.x, p1.y + lineWidth * 3);
+            ctx.stroke ();
+
+            return;
+
+            // start a single new form
+            ctx.beginPath ();
+
+            // give a lot of drawing instructions
+            // (points0.Length instructions, 100 in this case)
+            for (var i = 0; i <points0.length; i ++) {
+
+                // first random point
+                p0 = points0 [i];
+
+                // second random point
+                p1 = points1 [i];
+
+                // record a command saying "send the 'pencil' to the coordinates of the first point without drawing"
+                ctx.moveTo (p0.x, p0.y);
+
+                // record a command saying "draws a line to the coordinates of the second point"
+                ctx.lineTo (p1.x, p1.y);
+
+            }
+            // say to draw the line
+            ctx.lineWidth = 1;
+            ctx.stroke ();
+
+            return;
+
+            // bonus: an old trick for drawing cheap circles.
+
+            // - use a line thickness of the size of the diameter
+            ctx.lineWidth = 10;
+            // - use a lineCap "round"
+            ctx.lineCap = "round";
+
+            ctx.clearRect (0, 0, w, h);
+            ctx.beginPath ();
+            for (i = 0; i <points0.length; i ++) {
+
+                // first random point
+                p0 = points0 [i];
+
+                // draw a mini line to the right
+                // because of the thickness of the line, it will look like a round :)
+                ctx.moveTo (p0.x, p0.y);
+                ctx.lineTo (p0.x + .1, p0.y);
+
+            }
+            ctx.stroke ();
+
+        }
+
+        //on crée 1000 fois deux points pour tracer les segments
+        var points0 = [];
+        var points1 = [];
+        for (var i = 0; i < 1000; i++) {
+            var p0 = new Point(Math.random() * w, Math.random() * h);
+            var p1 = new Point(Math.random() * w, Math.random() * h);
+            points0.push(p0);
+            points1.push(p1);
+        }
+
+        draw();
+
+
+    </script>
+</body>
+
+</html>

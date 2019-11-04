@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>circles</title>
+    <meta name="description" content="using circles, distributing them on a grid and a circle using a touch of trigonometry">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+    <script src="code/base.js"></script>
+    <script src="code/geom.js"></script>
+    <script>
+
+        // create a function to draw a circle
+        function arc(ctx, x, y, radius) {
+            // start a set of drawing instructions
+            ctx.beginPath();
+
+            // drawing instruction of a 360 ° arc
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+
+            // close the form
+            ctx.closePath();
+
+            // draw
+            ctx.stroke();
+
+        }
+
+        // use a dot to position the circle
+        var i, j, x, y, angle, delta, countX, countY, deltaX, deltaY;
+        var c = new Point();
+        var radius = 100;
+
+        function draw() {
+
+            requestAnimationFrame(draw);
+            ctx.clearRect(0, 0, w, h);
+
+            // assign the line style
+            ctx.lineWidth = 20;
+            ctx.strokeStyle = "#06C";
+
+            // center of the circle
+            c.x = w / 2; // X
+            c.y = h / 2; // Y
+
+            // call the drawing method of an arc
+            arc(ctx, c.x, c.y, radius);
+
+            return;
+
+            // change the line thickness
+            ctx.lineWidth = 10;
+
+            // right: c.x + radius
+            arc(ctx, c.x + radius, c.y, radius);
+
+            // left: c.x - radius
+            arc(ctx, c.x - radius, c.y, radius);
+
+            // top: c.y - radius
+            arc(ctx, c.x, c.y - radius, radius);
+
+            // bottom: c.y + radius
+            arc(ctx, c.x, c.y + radius, radius);
+
+            // exercise add the circles:
+            // bottom left, bottom right, top left, top right
+
+            return;
+
+            ctx.clearRect(0, 0, w, h)
+
+            // a grid of circles
+            // with a for loop, we can add N circles arranged in grid
+
+            // we will make circles of 20 pixels radius
+            let radius = 20
+            let gap = radius * 2 + 5 // 5 = line thickness / 2
+
+            // cout X / Y determines how many circles it takes to cover the canvas
+            countX = canvas.width / ecart;
+            countY = canvas.height / ecart;
+
+            // deltaX / Y will store the X / Y position of the circles
+            delatX = 0;
+            deltaY = 0;
+            for (i = 0; i < countX; i++) {
+                // offset the circle in X
+                deltaX = i * deviation;
+
+                for (j = 0; j < countY; j++) {
+                    // offset the circle in Y
+                    deltaY = j * deviation;
+
+                    // draw a full circle in the center + X and Y offsets
+                    arc(ctx, deltaX, deltaY, radius);
+
+                }
+            }
+            return;
+
+
+
+
+
+            /*
+            how to add 6 circles regularly spaced around the center ?
+
+            to position the elements on a circle with XY is complicated
+            the solution is to use an angle and a length
+
+            the length, we know it is the radius: radius
+            if we want 6 circles around the center, we divide 360 ​​° by 6
+
+            delta = 360 ° / 6
+
+            it gives us a delta: the amount of angle between each circle
+
+            the position of one of the 6 circles around the center will be:
+
+            angle = (1 to 6 * delta)
+
+            and
+
+            XY position = angle * radius
+
+            to transform an angle into X and Y coordinates, we must use
+            the cosine and the sinus of the angle.
+
+                X = Math.cos(angle)
+
+            and
+
+            Y = Math.sin(angle)
+
+            the X and Y values ​​are between - 1 and 1 regardless of the angle
+            you have to multiply them by the radius to position them in space
+
+            X = Math.cos(angle) * radius
+
+            and
+
+            Y = Math.sin(angle) * radius
+
+            we try:
+            //*/
+
+            ctx.clearRect(0, 0, w, h)
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = "#C06";
+
+            // number of circles to place
+            var count = 6;
+
+            // amount of angle between each circle
+
+            // delta = 360 ° / count
+
+            // we use Radians and not degrees so:
+
+            // delta = Math.PI * 2 / count
+
+            delta = (Math.PI * 2) / count;
+
+            // from 1 to 6
+            for (i = 1; i <= count; i++) {
+
+                // angle = (1 to 6 * delta)
+                angle = (i * delta);
+
+                // transformation of the angle to X and Y
+
+                x = Math.cos(angle) * radius;
+
+                y = Math.sin(angle) * radius;
+
+                // drawing!
+                // arc (ctx, x, y, radius);
+
+                // to draw around the center
+                arc(ctx, c.x + x, c.y + y, radius);
+
+            }
+        }
+        draw();
+
+    </script>
+</body>
+
+</html>

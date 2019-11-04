@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+	<meta charset="UTF-8">
+
+	<title>canvas DOM element</title>
+	<meta name="description" content="a small step for the Man ...">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+	<script>
+
+		// we create a canvas element, it's like an image
+		// except that in addition to displaying it, we can draw in
+
+		var canvas = document.createElement("canvas");
+
+		// add it to the DOM (on the HTML page)
+
+		document.body.appendChild(canvas);
+
+		// we assign him a size in pixels
+		canvas.width = 512;
+		canvas.height = 384;
+
+		/*
+		
+		we ask for a reference to the graphic context
+		the context is the drawing tool of the canvas element
+		
+		*/
+
+		var context = canvas.getContext("2d");
+
+		/*
+		
+		all the drawing instructions are done on the context.
+		
+		if you want to draw a rectangle full, black opaque (default fill color)
+		we use the instruction:
+		
+		context.fillRect (origin X, origin Y, width, height);
+		
+		the origin of the drawing coordinates is at the top left.
+		
+		the X's start at 0 on the left and go to the "right" of the page
+		the Ys start at 0 at the top and go to the bottom of the page
+		
+		to fill the entire canvas area we pass the following arguments:
+		
+		0 px left
+		0 px at the top
+		512 px wide
+		384 px high
+		
+		*/
+
+		context.fillRect(0, 0, 512, 384);
+
+		// a small step for the Man ...
+
+
+	</script>
+</body>
+
+</html>

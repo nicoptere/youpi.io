@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>matrix transformation</title>
+    <meta name="description" content="translate, rotate and scale the context using it's transform matrix">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+
+    <script src="code/base.js"></script>
+    <script src="code/geom.js"></script>
+    <script src="code/graphics.js"></script>
+    <script>
+
+        var G = new Graphics(ctx);
+        / **
+         * @param ctx context to transform
+         * @param p0 starting point of the reflection line
+         * @param p1 end point of the reflection line
+         * @param distance distance of "glide"
+         * /
+        function reflection (ctx, p0, p1, distance) {
+
+            ctx.save ();
+            var angle = Math.atan2 (p1.y - p0.y, p1.x - p0.x);
+            ctx.translate (p0.x, p0.y);
+            ctx.rotate (angle);
+            ctx.scale (1, -1);
+            ctx.translate (distance || 0, 0); // "glide"
+            ctx.rotate (-angle);
+            ctx.translate (-p0.x, -p0.y);
+
+        }
+
+        function draw () {
+
+            requestAnimationFrame (draw);
+
+            / *
+            
+            by doing a translate (), a rotate () or a scale () of the context,
+            we alter its "matrix of transformation" to know everything about matrices,
+            I recommend reading this article on Flash Matrices
+            http://www.senocular.com/flash/tutorials/transformmatrix/
+            
+            unfortunately this matrix is ​​not accessible directly
+            however, we can assign the values ​​of this
+            thanks to the method:
+    
+                ctx.setTransform (a, b, c, d, e, f);
+    
+            where a and d
+            are the scaling values ​​often called SX and SY
+    
+            where b and c
+            are the values ​​of "skew" (distortion between extremities)
+            in Y and X, sometimes also called SY and SX
+    
+            where a, b, c and d
+            serve for rotations
+    
+            where e and f
+            are the translation values ​​often called TX and TY
+    
+            the default values ​​of a matrix are:
+    
+                ctx.setTransform (1, 0, 0, 1, 0, 0);
+    
+            also called the identity of the matrix
+
+
+
+            here are some "useful" transformations
+    
+            to animate the example, we create 2 oscillation variables
+            time-based (sin and cos of passing time)
+            
+            * /
+            var angle = (performance.now () * .001);
+            var cos = Math.cos (angle);
+            var sin = Math.sin (angle);
+
+            var cx = w / 2;
+            var cy = h / 2;
+
+            ctx.restore ();
+            ctx.save ();
+            ctx.clearRect (0, 0, w, h);
+
+            // do a translation "by hand"
+            
+            ctx.save ();
+    
+            // apply the transformation
+            ctx.setTransform (1,0,0,1, cx, cy);
+    
+            ctx.fillRect (-100, -50,200,100);
+    
+            ctx.restore ();
+            return
+
+            // make a translation AND a rotation "by hand"
+            ctx.clearRect (0, 0, w, h);
+            ctx.save ();
+
+            // apply the transformation
+            ctx.setTransform (cos, -sin,
+                sin, cos,
+                cx, cy);
+
+            ctx.fillRect (-100, -50, 200, 100);
+
+            ctx.restore ();
+            return
+
+
+            // do a translation AND a rotation AND a scaling "by hand"
+            ctx.clearRect (0, 0, w, h);
+            ctx.save ();
+    
+            // scale in X t Y
+            var sx = 2 * cos;
+            var sy = 2 * sin;
+    
+            // apply the transformation
+            ctx.setTransform (cos * sx, -sin * sx,
+                                sin * sy, cos * sy,
+                                cx, cy);
+    
+            ctx.fillRect (-100, -50,200,100);
+    
+            ctx.restore ();
+            return
+
+            // SKEWING an unfairly underrated transformation
+            ctx.clearRect (0, 0, w, h);
+            ctx.save ();
+    
+            // apply the transformation
+    
+            ctx.setTransform (1, sin, cos, 1, cx, cy);
+    
+            ctx.fillRect (-100, -50,200,100);
+    
+            ctx.restore ();
+            return
+
+            / *
+            
+            skewer on 2 axes gives a "sensation" of 3D
+            however, as the transformation is not "perspective"
+            but "affine", we can not have a "real" perspective
+            NB we can do a perspective transformation in CSS:
+            https://css-tricks.com/almanac/properties/p/perspective/
+
+            * /
+
+
+            // finally here is a useful method: reflection
+            // it allows to create a "mirror" along an arbitrary line
+    
+            ctx.clearRect (0, 0, w, h);
+            // point that revolves around the center
+            G.circle (cx, cy, 150);
+    
+            var p = new Point (cx + cos * 150, cy + sin * 150);
+    
+            // start and end of the mirror line
+            var m0 = new Point (cx - 200, cy - 75);
+            var m1 = new Point (cx + 200, cy + 75);
+            G.line (m0, m1);
+
+            //original
+    
+            ctx.fillStyle = "#C00";
+            G.disc( p, 20 );
+    
+                //we call the method
+                reflection( ctx, m0, m1 );
+    
+            //the context is now "mirrored" so if we draw 
+            // the same object with a different color
+    
+            ctx.fillStyle = "#06C";
+            G.disc( p, 20 );
+            ctx.restore();
+    
+            //it is drawned as a reflection of the original
+
+        }
+        window.addEventListener('resize', draw, false);
+        draw();
+
+
+    </script>
+
+
+</body>
+
+</html>

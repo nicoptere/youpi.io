@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>canvas basics & CSS</title>
+    <meta name="description" content="the drawing context, drawing methods and the CSS properties">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <style>
+        #canvas {
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+
+        @keyframes rotating {
+            from {
+                transform: rotate(0deg);
+                border-radius: 25%;
+                background-color: #FC0;
+            }
+
+            50% {
+                border-radius: 0;
+                background-color: #C06;
+            }
+
+            to {
+                transform: rotate(360deg);
+                border-radius: 25%;
+                background-color: #FC0;
+
+            }
+        }
+
+        .rotating {
+            animation: rotating 8s linear infinite;
+        }
+    </style>
+
+</head>
+
+<body>
+    <script>
+        // function to create / retrieve a graphical context
+        function getContext(w, h) {
+            var canvas = document.createElement("canvas");
+            canvas.width = w;
+            canvas.height = h;
+            return canvas.getContext("2d");
+        }
+
+        function draw() {
+
+            // create a graphical context (Drawing API)
+            var width = 512;
+            var height = 512;
+            var ctx = getContext(width, height);
+
+            // the context maintains a reference to the DOM element (the <canvas>) to which it refers
+            var canvas = ctx.canvas;
+            document.body.appendChild(canvas);
+
+
+            // to draw the line, use the instruction:
+            // ctx.strokeRect (origin X, origin Y, width, height);
+
+            // instead of filling all the space, we draw a rectangle centered on the line
+            // the coordinates:
+            // 64 px left
+            // 64 px at the top
+            // 512 - (2 * 64) px wide -> 384 px
+            // 512 - (2 * 64) px high -> 384 px
+
+            ctx.strokeRect(64, 64, width - 128, height - 128);
+            return
+
+            // which is equivalent to the following two instructions:
+            ctx.rect(64, 64, width - 128, height - 128);
+            ctx.stroke();
+            return
+
+            // in passing
+            // if you want to easily edit the width of the margins, you can write
+            var margin = 78;
+            ctx.strokeRect(margin, margin, width - 2 * margin, height - 2 * margin);
+            return
+
+            // draw a full rectangle
+
+            ctx.fillRect(0, 0, width, height);
+            return
+
+            // to erase a rectangular area, use the instruction
+            // ctx.clearRect (X, Y, W, H);
+
+            ctx.clearRect(64, 64, 384, 384);
+            return
+
+            // draw a blue square (#06C = blue)
+
+            ctx.fillStyle = "#06C";
+            ctx.fillRect(128, 128, 256, 256);
+            return
+
+            // as it is a "normal" HTML element we can add CSS rules:
+
+            // CSS centering:
+            canvas.setAttribute("id", "canvas");
+            return
+
+            // rotation CSS
+            canvas.classList.add("rotating");
+
+            // the base.js file at the root of the folder contains a 2d context instantiation called ctx.
+            // it also maintains a resize method, and two variables w and h that give the screen size
+            // plus some treats that we will study in the next sections
+
+        }
+        draw()
+
+    </script>
+</body>
+
+</html>

@@ -61,6 +61,7 @@ var CSVLoader = function(){
             scope.callback( data );
 
         };
+        
     }
 
 

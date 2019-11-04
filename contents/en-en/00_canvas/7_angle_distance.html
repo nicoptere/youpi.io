@@ -4,8 +4,8 @@
 <head lang="en">
     <meta charset="UTF-8">
 
-    <title>angles/distance</title>
-    <meta name="description" content="trigonométrie suite, calculer un angle et une distance">
+    <title>angle/distance</title>
+    <meta name="description" content="trigonometry: compute an angle and a distance">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 </head>
@@ -46,7 +46,7 @@
             ctx.lineJoin = "round";
             ctx.lineWidth = 2;
             ctx.fillStyle =
-            ctx.strokeStyle = "#CCC";
+                ctx.strokeStyle = "#CCC";
 
             //centre du cercle
             center.x = w / 2;
@@ -72,14 +72,14 @@
             return;
 
             //dessine le cercle positionné sur la souris de rayon:  centre - souris
-            G.circle( mouse, distance );
+            G.circle(mouse, distance);
             return;
 
             //dessine une portion de cercle entre 0 et l'angle: centre ^ souris
 
             //dessine en bleu si l'angle est inférieur à 0
             //en jaune si l'angle est supérieur à 0
-            ctx.fillStyle = ctx.strokeStyle = (angle > 0) ? "#FC0" : "#00F";
+            ctx.fillStyle = ctx.strokeStyle = (angle > 0) ? "# FC0" : "# 00F";
 
             ctx.lineWidth = 5;
             G.sector(center, 100, 0, angle);

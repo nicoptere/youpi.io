@@ -55,6 +55,7 @@ export default class Layout {
         close_code.addEventListener("mousedown", () => {
             _editor.reset()
             _codePanel.close()
+            this.updateUrl("")
         })
 
         /*------------
@@ -198,33 +199,27 @@ export default class Layout {
         })
     }
 
-    createSection(section, i) {
+    createSection( name, i) {
+        
+        let id = "section_" + name.replace(/\s/g, '_')
 
-        section.id = "section_" + section.name.replace(/\s/g, '_')
-
-        const html = SECTION_TEMPLATE(section)
+        const html = SECTION_TEMPLATE( name, id )
         document.querySelector(".cards").insertAdjacentHTML('beforeend', html);
 
-
         //this is used to choose the column in which cards are added (need fixing)
-        let sectionElement = document.querySelector("." + section.id)
+        let sectionElement = document.querySelector("." + id)
         sectionElement.cards = 0
 
         //adds the section link to the nav bar
-        let tab = `<a href="#${ section.id }"><div class="btn black">${section.name}</div></a>`
+        let tab = `<a href="#${ id }"><div class="btn black">${name}</div></a>`
         document.querySelector(".nav-tabs-list").insertAdjacentHTML('beforeend', tab)
 
         //remove back button for the first section
+        let back = document.querySelector("#" + id + " a")
         if (i == 0) {
-            let back = document.querySelector("#" + section.id + " a")
             back.parentNode.removeChild(back)
         }
 
-        //dev only
-        // if (i < 6) {
-        //   section.style.display = "none"
-        //   block.style.display = "none"
-        // }
         return sectionElement
     }
 
@@ -277,9 +272,18 @@ export default class Layout {
         root.pop()
         _editor.reset(_locale + "/" + url, _locale + "/" + root.join('/') + '/')
         _codePanel.open()
+        this.updateUrl(url)
 
     }
 
+    updateUrl(url){
+        
+        if ('URLSearchParams' in window) {
+            var searchParams = new URLSearchParams(window.location.search)
+            searchParams.set("page", escape( url ) );
+            var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+            history.pushState(null, '', newRelativePathQuery);
+        }
 
-
+    }
 }

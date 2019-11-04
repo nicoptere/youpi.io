@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>points & rectangles</title>
+    <meta name="description" content="drawing at different locations on the canvas">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+
+    <!-- we import the essentials -->
+    <script src="code/base.js"></script>
+
+    <script>
+        // a class point that stores 2 coorodnates X and Y
+        var Point = function (x, y) {
+            this.x = x || 0;
+            this.y = y || 0;
+        };
+
+
+        // a drawing method to draw in a loop
+        function draw() {
+            // requestAnimationFrame
+            // call the draw () function as often as possible
+
+            requestAnimationFrame(draw);
+
+            // delete everything
+            ctx.clearRect(0, 0, w, h);
+
+            // create a point at:
+            // 100 px in X
+            // 150 px in Y
+            var p = new Point(100, 150);
+
+            // size of the rectangle
+            var size = 25;
+
+            // draw a size SIZE rectangle at position P
+            ctx.fillRect(p.x, p.y, size, size);
+
+            return
+
+            // draw a centered square:
+
+            // change the position of P
+            p = new Point(w / 2, h / 2);
+
+            // redraw at the new position, at the same size
+            ctx.fillRect(p.x, p.y, size, size);
+
+            return
+
+            // draw a square at the bottom right
+
+            p.x = w - 100 - size;
+            p.y = h - 100 - size;
+            ctx.fillRect(p.x, p.y, size, size);
+
+            return
+
+            // draw 100 squares everywhere
+
+            // if the point array does not exist
+            if (points === undefined) {
+                // we create it
+                points = [];
+
+                // and we fill it
+                for (var i = 0; i < 100; i++) {
+
+                    //with points randomly placed on the surface of the screen
+                    var p = new Point(Math.random() * w, Math.random() * h);
+                    points.push(p);
+
+                }
+            }
+
+            points.forEach(function (p, i) {
+
+                ctx.fillRect(p.x, p.y, size, size);
+
+                // instead of using the size size
+                // we can use another variable
+                // the index of the point in the table for example
+
+                return
+
+                ctx.fillRect(p.x, p.y, i / 16, i * 8);
+
+                // you can play with values ​​16 and 8 to see what happens
+            });
+
+        }
+        var points;
+        draw();
+
+    </script>
+</body>
+
+</html>

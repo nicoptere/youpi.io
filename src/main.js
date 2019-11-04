@@ -9,54 +9,77 @@ import Editor from "./js/Editor"
 
 ---------------------------------------------------------*/
 
-//collects the contents
 
+//collects the contents
 const contents = require("./contents.json")
 
+//global vars
 let LOCALE = "fr-fr"
 let THUMBS = "assets/thumbnails/"
 let IMAGES = "assets/images/"
 
-let availableLocales = []
-for( let key in contents ){
-  availableLocales.push( key )
+
+let currentPage = ""
+//switch to appropriate locale or fallback to english
+  let searchParams = new URLSearchParams(window.location.href)
+  console.log( searchParams)
+if ('URLSearchParams' in window) {
+
+  let availableLocales = []
+  for (let key in contents) {
+    availableLocales.push(key)
+  }
+
+  let searchParams = new URLSearchParams(window.location.search)
+
+  if( searchParams.has( "locale" )){
+    let locale = searchParams.get( "locale" )
+    console.log( 'detected locale:', locale, availableLocales)
+    if( availableLocales.indexOf(locale) != -1 ){
+      LOCALE = locale
+    }
+  }
+
+  searchParams.set("locale", LOCALE );
+
+  //tries to retrieve the current page being viewed
+  if( searchParams.has( "page" ) ){
+    currentPage = unescape( searchParams.get( "page" ) )
+  }
 }
+console.log( LOCALE, contents[LOCALE] )
+
+
 
 
 //  initialise DOM objects and layout 
-
-let layout = new Layout( LOCALE, THUMBS, IMAGES )
-
-
+let layout = new Layout(LOCALE, THUMBS, IMAGES)
 
 //  create the editor
-
-let editor = new Editor( LOCALE + "/" ) 
-
+let editor = new Editor(LOCALE + "/")
 
 //initialise the Layout (create the codepanel, binds interface buttons, etc. ):
-
-layout.init( editor )
+layout.init(editor)
 
 
 //create the sections
-
 const list = contents[LOCALE]
 list.sections.forEach((section, i) => {
-  layout.createSection({
-    name: section,
-    description: ""
-  }, i)
+
+  // if( i > 1 )return
+  layout.createSection( section, i)
+
 });
+window.ed = editor.editor
 
 
 //create the cards 
-
 let cardIndex = 0
-list.cards.forEach(card => {
-  
-  let section = document.querySelector(".section_" + card.section )
-  layout.createCard( section, card, cardIndex++ );
+list.cards.forEach( card => {
+
+  let section = document.querySelector(".section_" + card.section)
+  if( section == null )return
+  layout.createCard(section, card, cardIndex++);
 
 });
 
@@ -73,7 +96,10 @@ layout.bindButtons()
 ---------------------------------------------------------*/
 
 
-// layout.gotoPage("03_variables/5_easing.html")
+
+if( currentPage != "" ){
+  layout.gotoPage(currentPage)
+}
 
 //gl demos
 /*
@@ -87,4 +113,3 @@ let urls = [
 editor.reset(Interactive, urls)
 codePanel.open()
 //*/
-

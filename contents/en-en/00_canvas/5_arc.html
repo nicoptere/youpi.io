@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>arcs</title>
+    <meta name="description" content="drawing arcs and circles">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+</head>
+
+<body>
+
+    <script src="code/base.js"></script>
+    <script>
+        function draw() {
+
+            requestAnimationFrame(draw);
+            ctx.clearRect(0, 0, w, h);
+
+            // the circle command:
+            // there is no ctx.circle () statement
+            // the circle is a special case of an arc.
+            // it is a 360 ° or 2 * PI arc
+            //
+            // of the instruction to draw a circle is:
+            //
+            // ctx.arc (X, Y, Radius, AngleDepart, AngleArrivee, Direction)
+            //
+            // or:
+            //
+            // X = position of the center of the circle in X
+            // Y = position of the center of the circle in Y
+            //
+            // Radius = the radius of the circle
+            //
+            // AngleDepart = the starting angle of the arc in RADIANS
+            //
+            // AngleArrivee = the angle of arrival of the arc in RADIANS
+            //
+            // Direction = true | false determines which way we draw
+            // true = time = CW: ClockWise
+            // false = counterclockwise = CCW: CounterClockWise
+            //
+            //
+            // RADIANS?
+            //
+            // a RADIAN is an angle measure sui is worth:
+            //
+            // RADIAN = PI / 180
+            //
+            // in passing, a degree is worth
+            //
+            // DEGREES = 180 / PI
+            //
+            // except special case all angle measurements are done in RADIANS
+            //
+            // to pass degrees to radians we can do:
+            //
+            // radians = degrees * (Math.PI / 180)
+            //
+            // and conversely to go from radians to degrees:
+            //
+            // degrees = radians * (180 / Math.PI)
+            //
+            // NB: 2 constants RAD and DEG are present in base.js
+
+            var cx = w / 2; // X position of the circle
+            var cy = h / 2; // Y position of the circle
+
+            var radius = 150; // R radius of the circle
+
+            var angle = 0; // Starting angle in radians
+
+            var arcLength = Math.PI * 2; // LengthArc in radians
+
+            var direction = false; // Time Direction | CCW
+
+            // start a set of drawing instructions
+            ctx.beginPath();
+
+            // drawing instruction of an arc
+            ctx.arc(cx, cy, radius, angle, arcLength, direction);
+
+            // assign the line style
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = "#06C";
+            ctx.stroke();
+
+            return;
+
+            // close the form
+            ctx.closePath();
+
+            // assign the fill style
+            ctx.fillStyle = "#FC0";
+            ctx.fill();
+
+            return;
+
+            // draw an arc portion
+            ctx.clearRect(0, 0, w, h);
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, -RAD * 30, RAD * 30, direction);
+            ctx.stroke();
+
+            return;
+
+            // we can draw bigger and bigger bows
+            // increasing the radius
+            ctx.clearRect(0, 0, w, h);
+            for (var i = 10; i < 180; i *= 1.25) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, i * 2, -RAD * i, RAD * i, direction);
+                ctx.stroke();
+            }
+
+            return;
+
+            // we can also choose the starting angle
+            var startAngle = RAD * 120;
+            ctx.clearRect(0, 0, w, h);
+            for (var i = 10; i < 150; i *= 1.25) {
+
+                let start = startAngle - RAD * i
+                let end = startAngle + RAD * i
+
+                ctx.beginPath();
+                ctx.arc(cx, cy, i * 2, start, end, direction);
+                ctx.stroke();
+            }
+
+
+            return;
+
+            // CW or CCW?
+            // we can draw a ring by drawing a disc
+            // in the CW direction then a smaller disc in the CCW sense
+            ctx.clearRect(0, 0, w, h);
+            ctx.beginPath();
+            ctx.arc(cx, cy, h / 3, 0, PI * 2, true);
+            ctx.arc(cx, cy, h / 4, 0, PI * 2, false);
+            ctx.stroke();
+            ctx.fill();
+
+
+
+        }
+        draw();
+
+    </script>
+</body>
+
+</html>

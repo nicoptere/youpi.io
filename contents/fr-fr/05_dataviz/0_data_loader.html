@@ -14,12 +14,12 @@
 <body>
 
 
-    <script src="../base.js"></script>
-    <script src="../geom.js"></script>
-    <script src="../graphics.js"></script>
-    <script src="CSVLoader.js"></script>
+    <script src="code/base.js"></script>
+    <script src="code/geom.js"></script>
+    <script src="code/graphics.js"></script>
+    <script src="code/dataviz/CSVLoader.js"></script>
 
-    <script src="../utils/metrics.js"></script>
+    <script src="code/utils/Metrics.js"></script>
     <script>
 
         /*
@@ -57,11 +57,11 @@
 
             data = result;
 
-            var bounds = metrics.getBounds(data, 't');
+            var bounds = Metrics.getBounds(data, 't');
             t_min = bounds[0];
             t_max = bounds[1];
 
-            bounds = metrics.getBounds(data, 'ff');
+            bounds = Metrics.getBounds(data, 'ff');
             ff_min = bounds[0];
             ff_max = bounds[1];
 
@@ -115,40 +115,6 @@
             ctx.fillStyle = "#09C";
             winds.forEach(function (p) { G.disc(p, 2); });
 
-
-            // //1 lignes et points
-            // simpleGraph(ctx0, temperatures, winds);
-
-
-            // //2 histogramme
-            // compareHistogram(ctx1, temperatures, winds);
-
-
-            // //3 sélection d'un point sur une courbe
-            // //une variable de temps qui oscille
-            // var time = .5 + Math.sin(performance.now() * .0005) * .5;
-            // plotTime(ctx2, winds, time);
-
-
-            // //4 K-moyens (clusters)
-            // plotKmeans(ctx3, temperatures, winds);
-
-
-            // //5 dessine des portions d'anneau
-            // //rayon intérieur et extérieur du cercle
-            // var inRadius = height / 4;
-            // var outRadius = height / 2 * time;
-            // plotPolar(ctx4, inRadius, outRadius, data);
-
-            // //6 convex hull
-            // plotHull(ctx5, data);
-
-            // //6 deux listes reliées
-            // plotQuadraticCompare(ctx6, data);
-
-
-            // //7 deux séries d'arcs
-            // plotArcs(ctx7, data);
         }
 
     </script>

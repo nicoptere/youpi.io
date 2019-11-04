@@ -3,7 +3,7 @@ const fs = require('fs');
 
 //list all the HTML pages
 
-recursive("./fr-fr/", ["*.js", '*.txt', '*.csv', '*.jpg', "index.html"], function (err, urls) {
+recursive("./", ["*.js", '*.txt', '*.csv', '*.jpg', "index.html"], function (err, urls) {
    
     urls.sort()
 
@@ -15,6 +15,7 @@ recursive("./fr-fr/", ["*.js", '*.txt', '*.csv', '*.jpg', "index.html"], functio
 
         //extracts the locale (fr-fr, en-en, ... )
         let locale = url.split('\\')[0];
+        if( locale == "assets" )continue;
 
         if( json[locale] == null ){
 

@@ -16,20 +16,19 @@
     <script>
 
         var G = new Graphics(ctx);
-
-        /**
-         * @param ctx contexte 2d à transformer
-         * @param p0 point de départ de la ligne de réflection
-         * @param p1 point d'arrivée de la ligne de réflection
-         * @param distance distance de "glide"
-         */
+        / **
+            * @param ctx context 2d to transform
+                * @param p0 starting point of the reflection line
+                    * @param p1 end point of the reflection line
+                        * @param distance distance of "glide"
+                            * /
         function reflection(ctx, p0, p1, distance) {
 
             var angle = Math.atan2(p1.y - p0.y, p1.x - p0.x);
             ctx.translate(p0.x, p0.y);
             ctx.rotate(angle);
             ctx.scale(1, -1);
-            ctx.translate(distance || 0, 0);//"glide"
+            ctx.translate(distance || 0, 0); // "glide"
             ctx.rotate(-angle);
             ctx.translate(-p0.x, -p0.y);
 
@@ -39,8 +38,8 @@
 
             ctx.clearRect(0, 0, w, h);
 
-            // on fait bouger un point "count" fois linéairement en X
-            // aléatoirement en Y et on stocke les positions dans un tableau 'points'
+            // we move a point "count" times linearly in X
+            // randomly in Y and we store the positions in a table 'points'
 
             var rotations = 64;
             var angleStep = Math.PI * 2 / rotations;
@@ -53,82 +52,82 @@
 
             }
 
-            //et on la desine, ce sera le motif à refléter autour d'un centre
+            // and we design it, it will be the pattern to reflect around a center
             G.polyline(points);
 
             return
 
 
-            //on va faire passer la forme d'un axe de réflexion horizontal
+            // we will make the shape of a horizontal axis of reflection
 
             var s = new Point(0, h / 2)
             var e = new Point(w, h / 2)
 
-            //on sauve l'état du contexte
+            // save the state of the context
             ctx.save()
 
-            //on applique la réflexion
+            // apply the reflection
             reflection(ctx, s, e)
 
-            //on dessine la même forme en rouge sur le context transformé
-            ctx.strokeStyle = "#f00"
+            // we draw the same shape in red on the transformed context
+            ctx.strokeStyle = "# f00"
             G.polyline(points);
 
-            //on restaure l'état du contexte
+            // restore the state of the context
             ctx.restore()
 
             return
 
-            var colors = ["#666", "#06C", "#C06", "#FC0"]
+            var colors = ["# 666", "# 06C", "# C06", "# FC0"]
             ctx.clearRect(0, 0, w, h)
             for (var n = 0; n < colors.length; n++) {
 
-                //commenter pour afficher les 4 couleurs
-                if( n > 0 ){
-                    continue
+                // comment to display the 4 colors
+                if (n > 0) {
+                    continue;
                 }
 
 
-                //on assigne une couleur 
+                // we assign a color
                 ctx.strokeStyle = colors[n]
 
-                //on va faire passer la forme d'un axe de réflexion horizontal
+                // we will make the shape of a horizontal axis of reflection
 
                 var s = new Point(0, h / 2)
                 var e = new Point(w, h / 2)
 
-                // a un axe aléatoire
-                //on choisit aléatoirement 2 points dans la page pour faire un axe
+                // has a random axis
+                // randomly select 2 points in the page to make an axis
 
                 var a = new Point(Math.random() * w, Math.random() * h)
                 var b = new Point(Math.random() * w, Math.random() * h)
 
                 /*
-                //randomiser le premier axe
+                // randomize the first axis
                 s = new Point(Math.random() * w, Math.random() * h)
                 e = new Point(Math.random() * w, Math.random() * h)
                 */
 
-                //on applique la couleur
+                // apply the color
                 ctx.strokeStyle = colors[n]
                 var count = 64
                 for (var i = 0; i < count; i++) {
 
-                    //on sauve l'état du contexte
+                    // save the state of the context
                     ctx.save()
 
-                    //on interpole les points de l'axe
+                    // we interpolate the points of the axis
                     var t = i / count
                     var c = a.pointAt(t, s)
                     var d = b.pointAt(t, e)
 
-                    //on applique la réflexion
+                    // apply the reflection
                     reflection(ctx, c, d)
 
-                    //on dessine la forme
+                    // draw the shape
                     G.polyline(points);
 
-                    //on restaure l'état du contexte
+                    // restore the state of the context
                     ctx.restore()
 
                 }

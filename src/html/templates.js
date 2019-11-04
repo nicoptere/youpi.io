@@ -1,12 +1,11 @@
-export const SECTION_TEMPLATE = function( section ){
+export const SECTION_TEMPLATE = function( name, id ){
 
     return `
-<div class="section" id="${ section.id }" >
+<div class="section" id="${ id }" >
     <a href="#home"><div class="btn black"><i class="material-icons">arrow_upward</i></div></a> 
-    <h5>${section.name}</h5>
-    <p>${section.description}</p>      
+    <h5>${name}</h5>   
 </div>    
-<div class="row ${ section.id }">
+<div class="row ${ id }">
     <div class="col l4 m6 s12"></div>
     <div class="col l4 m6 s12"></div>
     <div class="col l4 m6 s12"></div>
