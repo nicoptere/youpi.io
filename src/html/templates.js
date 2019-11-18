@@ -29,3 +29,18 @@ export const CARD_TEMPLATE = function (card, imageTag) {
     </div>
 </div>`
 }
+export const LINK_TEMPLATE = function (card, locale ) {
+
+    return `
+<div class="card hoverable">
+    <div class="card-image">
+        <a class="btn-floating btn-small halfway-fab waves-effect waves-light blue" href="${ card.externalUrl }" target="_blank">
+            <i class="material-icons" fullscreen data-url="${ card.externalUrl }" data-img="${ card.img }">open_in_new</i>
+        </a>
+    </div>
+    <div class="card-content">
+        <span class="card-title">${card.title}</span>
+        <p>${card.description}</p>
+    </div>
+</div>`
+}

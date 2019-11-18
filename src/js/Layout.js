@@ -1,5 +1,5 @@
 const M = require("materialize-css")
-import { CARD_TEMPLATE, SECTION_TEMPLATE } from "../html/templates"
+import { CARD_TEMPLATE, SECTION_TEMPLATE, LINK_TEMPLATE } from "../html/templates"
 import Grapher from "./grapher/Grapher";
 
 
@@ -50,13 +50,30 @@ export default class Layout {
         open_code.addEventListener("mousedown", () => {
             _codePanel.open()
         })
-
+        
         let close_code = document.querySelector(".close-code-btn")
         close_code.addEventListener("mousedown", () => {
             _editor.reset()
             _codePanel.close()
             this.updateUrl("")
         })
+
+        /*------------
+        
+        init the screenshot button
+        
+        ------------*/
+
+        let save = document.querySelector('.save-code-btn')
+        save.addEventListener("mousedown", (e) => {
+
+            let win = _editor.display_frame.contentWindow
+            let doc = win.document
+            let ctx = doc.querySelector("canvas").getContext('2d')
+            win.save(ctx, currentCard.replace(".png", ""))
+
+        })
+
 
         /*------------
         
@@ -93,6 +110,7 @@ export default class Layout {
 
         // document.querySelector(".functions").style.display = "none"
         // document.querySelector(".graph").parentNode.parentNode.style.display = "none"
+
         let graphDom = document.querySelector(".graphHolder")
         _grapher = new Grapher( graphDom, 512, 512 );
 
@@ -144,22 +162,14 @@ export default class Layout {
 
         })
 
-
         /*------------
         
-        init the screenshot button
+        init the switch button in the code panel 
         
         ------------*/
 
-        let save = document.querySelector('.save-code-btn')
-        save.addEventListener("mousedown", (e) => {
-
-            let win = _editor.display_frame.contentWindow
-            let doc = win.document
-            let ctx = doc.querySelector("canvas").getContext('2d')
-            win.save(ctx, currentCard.replace(".png", ""))
-
-        })
+        let fullscreenBtn = document.querySelector('.fullscreen-btn')
+        fullscreenBtn.addEventListener("mousedown", this.toggleFullscreen )
 
 
         /*------------
@@ -199,6 +209,49 @@ export default class Layout {
         })
     }
 
+    toggleFullscreen(e){
+            
+        let c = document.querySelector('.code')
+        let r = document.querySelector('.result')
+        let p = document.querySelector('.parameters')
+            
+        let forward = document.querySelector('.forward')
+        let switchBtn = document.querySelector('.switch-panels-btn')
+        let open_code = document.querySelector(".open-code-btn")
+        let close_code = document.querySelector(".close-code-btn")
+        let save = document.querySelector('.save-code-btn')
+
+        if( c.classList.contains( 'hidden') ){
+
+            c.classList.remove( 'hidden')
+            r.classList.remove( 's12')
+            r.classList.add( 's6')
+            p.classList.remove('hidden')
+
+            switchBtn.classList.remove('hidden')
+            forward.classList.remove('hidden')
+            save.classList.remove('hidden')
+            open_code.classList.remove('hidden')
+            close_code.classList.remove('hidden')
+                            
+        }else{
+
+            c.classList.add( 'hidden')
+            r.classList.remove( 'pull-s6')
+            r.classList.remove( 's6')
+            r.classList.add( 's12')
+            p.classList.add('hidden')
+            
+            switchBtn.classList.add('hidden')
+            forward.classList.add('hidden')
+            save.classList.add('hidden')
+            open_code.classList.add('hidden')
+            close_code.classList.add('hidden')
+
+        }
+        _editor.resize()
+    }
+
     createSection( name, i) {
         
         let id = "section_" + name.replace(/\s/g, '_')
@@ -236,7 +289,10 @@ export default class Layout {
         if (index > 2) {
             imageTag = '<img class="lazy" data-src="' + thumbnail + '" />'
         }
-        const html = CARD_TEMPLATE(card, imageTag)
+        let html = CARD_TEMPLATE(card, imageTag)
+        if( card.externalUrl ){
+            html = LINK_TEMPLATE(card, _locale)
+        }
         col.insertAdjacentHTML('beforeend', html)
 
     }
@@ -257,9 +313,46 @@ export default class Layout {
                 if (url == null) return
                 
                 //window.location.hash = url
+                let fullscreen = e.target.getAttribute('fullscreen')
                 currentPage = e.target.getAttribute('data-url')
                 currentCard = e.target.getAttribute('data-img')
-                this.gotoPage(currentPage)
+                console.log( fullscreen, currentPage,  currentPage.match(/http/) )
+                if( currentPage.match(/http/) ){
+                    window.location.href = currentPage
+                        /*
+                    let c = document.querySelector('.code')
+                    let r = document.querySelector('.result')
+                    let p = document.querySelector('.parameters')
+                        
+                    let forward = document.querySelector('.forward')
+                    let switchBtn = document.querySelector('.switch-panels-btn')
+                    let open_code = document.querySelector(".open-code-btn")
+                    let close_code = document.querySelector(".close-code-btn")
+                    let save = document.querySelector('.save-code-btn')
+
+                    c.classList.add( 'hidden')
+                    r.classList.remove( 'pull-s6')
+                    r.classList.remove( 's6')
+                    r.classList.add( 's12')
+                    p.classList.add('hidden')
+                    
+                    switchBtn.classList.add('hidden')
+                    forward.classList.add('hidden')
+                    save.classList.add('hidden')
+                    open_code.classList.add('hidden')
+                    close_code.classList.add('hidden')
+
+                    _editor.resize()
+
+                    _codePanel.open()
+                    document.querySelector(".display-frame").src = _locale + '/' + currentPage
+                    //*/
+
+                    return
+                }else{   
+                    this.gotoPage(currentPage)
+                }
+
 
             });
         })
@@ -268,11 +361,18 @@ export default class Layout {
 
     gotoPage(url) {
 
-        let root = url.split('/')
-        root.pop()
-        _editor.reset(_locale + "/" + url, _locale + "/" + root.join('/') + '/')
-        _codePanel.open()
-        this.updateUrl(url)
+        if( url.match(/http/) ){
+        
+            window.location.href = url;
+            return
+        }else{
+
+            let root = url.split('/')
+            root.pop()
+            _editor.reset(_locale + "/" + url, _locale + "/" + root.join('/') + '/')
+            _codePanel.open()
+            this.updateUrl(url)
+        }
 
     }
 
@@ -286,4 +386,5 @@ export default class Layout {
         }
 
     }
+
 }

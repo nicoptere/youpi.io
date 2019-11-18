@@ -125,7 +125,7 @@ export default class Editor {
         this.textarea.style.height = height
         
         let cm = this.textarea.querySelector('.CodeMirror')
-        cm.style.borderBottom = "2px solid #CCCCCC"
+        // cm.style.borderBottom = "2px solid #CCCCCC"
         cm.style.height = height
         
         // to take screenshots
@@ -162,18 +162,21 @@ export default class Editor {
         text = text.replace(/^\t\t/gm, '\t')
         text = text.replace(/\t(<\/|<)script/gm, '$1script')
 
-        //change PATH
-        // text = text.replace(/(href="|src=")/gm, '$1' + path)
+        //change PATH for local assets
+        if( text.match(/http:\/\//gmi )){
+            return text
+        }
+        text = text.replace(/^(?!\s*<script.*>$).*(href="|src="|poster="|url\()/gmi, '$&' + path)
         
         // // // bring return and continue statemetns to the beginning of line
         // text = text.replace(/^\s.*(return|continue|break)[;\s]*$/gm, '\t$1'+EOL)
-
+        
         //restores relatives path 
-        re = new RegExp( path + '\.\.\/', 'gm' )
+        re = new RegExp( path + '\.\.\/\.\.\/', 'gm' )
         if( re.test( text ) ){
-
+            
             text = text.replace( re, this.path )
-
+            
         }
         
         return text

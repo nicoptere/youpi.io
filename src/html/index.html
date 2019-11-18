@@ -9,11 +9,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            zoom: reset;
+            touch-action: none;
+        }
+
+        .preload-container {
+
+            position: absolute;
+
+            width: 100%;
+            top: 50%;
+            left: 50%;
+            /* background-color: aliceblue; */
+
+            transition-timing-function: ease-out;
+            transition: 0.5s;
+            opacity: 1;
+
+        }
+
+        .wait {
+
+            position: absolute;
+            margin: auto;
+
+            width: 3em;
+            height: 3em;
+            top: -1.5em;
+            left: -1.5em;
+
+            border: 3px solid #606060;
+            border-top-color: white;
+            border-radius: 50%;
+
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none;
+            visibility: hidden;
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="content">
+    <div class="preload-container">
+        <div class="wait"></div>
+    </div>
+    <div class="content hidden">
 
         <!-- page navbar-->
 
@@ -50,13 +105,28 @@
                 <div class="">
 
                     <!-- close btn -->
-                    <div class="fixed-action-btn code-panel-close right">
+                    <div class="close-code-btn fixed-action-btn code-panel-close right">
                         <a class="btn-floating red">
-                            <i class="close-code-btn medium material-icons">close</i>
+                            <i class="medium material-icons">close</i>
                         </a>
 
-                        <a class="btn-floating blue" style="margin-top: 2em">
-                            <i class="save-code-btn medium material-icons">camera</i>
+                    </div>
+                    <div class="save-code-btn fixed-action-btn code-panel-close right" style="margin-right: 3em">
+                        <a class="btn-floating blue">
+                            <i class="medium material-icons">camera</i>
+                        </a>
+                    </div>
+
+
+                    <!-- fullscreen button -->
+                    <!-- <div class="fullscreen-btn col s12">
+                                <a class="fullscreen-panels-btn btn-floating black">
+                                    <i class=" medium material-icons"></i>
+                                </a>
+                            </div> -->
+                    <div class="fixed-action-btn code-panel-close right" style="margin-right: 6em">
+                        <a class="fullscreen-btn btn-floating black">
+                            <i class="medium material-icons">fullscreen</i>
                         </a>
                     </div>
 
@@ -150,6 +220,7 @@
                             </a>
                         </div>
 
+
                     </div>
 
                 </div>
@@ -204,7 +275,8 @@
                             <a href="https://natureofcode.com/book/">The Nature of Code</a> by <a
                                 href="https://twitter.com/shiffman">Daniel Shiffman</a>
                             <p>an invaluable resource to understand computational geometry, systems, agents, fractals
-                                and so much more... if you're a video person, he is the mastermind behind <a href="https://www.youtube.com/watch?v=PBsUD40nPkI">the coding train</a></p>
+                                and so much more... if you're a video person, he is the mastermind behind <a
+                                    href="https://www.youtube.com/watch?v=PBsUD40nPkI">the coding train</a></p>
                         </li>
 
                         <li class="collection-item">
@@ -216,10 +288,14 @@
                         </li>
 
                         <li class="collection-item">
-                             <a href="https://twitter.com/mattdesl">Matt DesLauriers</a> is a proficient creative dev, he maintains 
-                             <a href="https://github.com/mattdesl/workshop-webgl-glsl">a beautiful series of articles</a> about WebGL and GLSL,
-                              he also released <a href="https://p5-demos.glitch.me/"> P5.js Demos</a> series that uses the <a href="https://p5js.org/">P5.js library</a>. 
-                              he developed <a href="https://github.com/mattdesl/canvas-sketch">canvas-sketch</a>, his own creative dev lib and countless modules for 2D and 3D</p>
+                            <a href="https://twitter.com/mattdesl">Matt DesLauriers</a> is a proficient creative dev, he
+                            maintains
+                            <a href="https://github.com/mattdesl/workshop-webgl-glsl">a beautiful series of articles</a>
+                            about WebGL and GLSL,
+                            he also released <a href="https://p5-demos.glitch.me/"> P5.js Demos</a> series that uses the
+                            <a href="https://p5js.org/">P5.js library</a>.
+                            he developed <a href="https://github.com/mattdesl/canvas-sketch">canvas-sketch</a>, his own
+                            creative dev lib and countless modules for 2D and 3D</p>
                         </li>
 
                         <li class="collection-item">
@@ -313,7 +389,7 @@
                         something different.
                         the idea is to explain the underlying principles so that they can later be used in any language.
                     </p>
-                    
+
                     <p>
                         it's available on <a href="https://github.com/nicoptere/youpi.io">github</a> too :)
                     </p>
@@ -325,7 +401,7 @@
                         <a href="https://materializecss.com/">materialize css</a>.
                     </p>
                 </div>
-                
+
             </div>
         </div>
 

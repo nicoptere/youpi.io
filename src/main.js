@@ -18,29 +18,27 @@ let LOCALE = "fr-fr"
 let THUMBS = "assets/thumbnails/"
 let IMAGES = "assets/images/"
 
-
 let currentPage = ""
-//switch to appropriate locale or fallback to english
-  let searchParams = new URLSearchParams(window.location.href)
-  console.log( searchParams)
 if ('URLSearchParams' in window) {
-
+  
   let availableLocales = []
   for (let key in contents) {
     availableLocales.push(key)
   }
 
+  //switch to appropriate locale or fallback to french
   let searchParams = new URLSearchParams(window.location.search)
 
   if( searchParams.has( "locale" )){
     let locale = searchParams.get( "locale" )
-    console.log( 'detected locale:', locale, availableLocales)
+    // console.log( 'detected locale:', locale, availableLocales)
     if( availableLocales.indexOf(locale) != -1 ){
       LOCALE = locale
     }
   }
 
   searchParams.set("locale", LOCALE );
+  
 
   //tries to retrieve the current page being viewed
   if( searchParams.has( "page" ) ){
@@ -56,7 +54,8 @@ console.log( LOCALE, contents[LOCALE] )
 let layout = new Layout(LOCALE, THUMBS, IMAGES)
 
 //  create the editor
-let editor = new Editor(LOCALE + "/")
+let thumbnails = false//fixes the window size to 512*512 to make the thumbnails
+let editor = new Editor(LOCALE + "/", thumbnails)
 
 //initialise the Layout (create the codepanel, binds interface buttons, etc. ):
 layout.init(editor)
@@ -79,6 +78,7 @@ list.cards.forEach( card => {
 
   let section = document.querySelector(".section_" + card.section)
   if( section == null )return
+
   layout.createCard(section, card, cardIndex++);
 
 });
@@ -100,6 +100,10 @@ layout.bindButtons()
 if( currentPage != "" ){
   layout.gotoPage(currentPage)
 }
+
+document.body.removeChild(document.querySelector('.preload-container'))
+document.querySelector('.content').classList.remove("hidden")
+
 
 //gl demos
 /*
