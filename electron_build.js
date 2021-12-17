@@ -1,8 +1,7 @@
-
 // const fs = require('fs');
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow } = require("electron");
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   let win = new BrowserWindow({
     width: 800,
@@ -10,17 +9,14 @@ function createWindow () {
     // transparent: true,
     // frame: false,
     webPreferences: {
-      nodeIntegration: true
-    }
-  })
+      nodeIntegration: true,
+    },
+  });
 
-
-
-  win.loadFile('dist/index.html')
+  win.loadFile("dist/index.html");
 }
 
-app.on('ready', createWindow)
-
+app.on("ready", createWindow);
 
 //   function saveCallback(canvas, filePath) {
 //     // Get the DataUrl from the Canvas
